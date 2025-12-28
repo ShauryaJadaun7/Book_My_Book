@@ -1,0 +1,3 @@
+flask db init
+flask db migrate -m "add borrow & barter fields"
+flask db upgrade
