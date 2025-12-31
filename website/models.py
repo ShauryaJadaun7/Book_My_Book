@@ -39,10 +39,8 @@ class BookOption(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'), nullable=False)
 
-    option_type = db.Column(
-        db.String(20),
-        nullable=False
-    )  # sell | borrow | barter
+    option_type = db.Column(db.String(20), nullable=False)  
+    is_active = db.Column(db.Boolean, default=True)
 
     book = db.relationship('Book', backref='options')
 
@@ -96,43 +94,29 @@ class BorrowRequest(db.Model):
 # ================= BARTER =================
 class BarterRequest(db.Model):
     __tablename__ = 'barter_requests'
-
     id = db.Column(db.Integer, primary_key=True)
-    requester_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    requested_book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-
+    
+    # FIX: Use 'books.id' (plural) to match your Book table definition
+    requested_book_id = db.Column(db.Integer, db.ForeignKey('books.id'), nullable=False)
+    
+    # FIX: Use 'users.id' (plural) to match your User table definition
+    requester_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
     offered_book_title = db.Column(db.String(200), nullable=False)
+    offered_book_author = db.Column(db.String(200), nullable=True) 
+    offered_book_image = db.Column(db.String(200), nullable=True)
+    
     offered_book_genre = db.Column(db.String(100))
-    offered_book_image = db.Column(db.String(255))
-
-    status = db.Column(
-        db.String(20),
-        default='pending'
-    )  # pending | accepted | rejected
-
+    message = db.Column(db.Text)
+    status = db.Column(db.String(20), default='pending')
     requested_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    requester = db.relationship('User', backref='barter_requests')
-    requested_book = db.relationship(
-        'Book',
-        foreign_keys=[requested_book_id]
-    )
-
-
 class BarterDetail(db.Model):
-    """
-    Created only when barter is completed
-    """
     __tablename__ = 'barter_details'
 
     id = db.Column(db.Integer, primary_key=True)
-    barter_request_id = db.Column(
-        db.Integer,
-        db.ForeignKey('barter_requests.id'),
-        unique=True
-    )
-
+    # FIX: Matches 'barter_requests.id' correctly now
+    barter_request_id = db.Column(db.Integer, db.ForeignKey('barter_requests.id'), nullable=False)
     completed_at = db.Column(db.DateTime)
 
     barter_request = db.relationship('BarterRequest', backref='detail')

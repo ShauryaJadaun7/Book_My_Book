@@ -7,22 +7,36 @@ db = SQLAlchemy()
 
 from flask_migrate import Migrate
 migrate = Migrate()
+import os
+
+
 
 def create_app():
     app = Flask(__name__)
-    migrate = Migrate(app, db)
-
-    migrate.init_app(app, db)
-
+    app.config["SECRET_KEY"] = os.urandom(24)
+    
+    # Configuration
     app.config["SECRET_KEY"] = "SECRET_KEY"
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:12345@localhost:5432/BookMyBook"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    
+    # Define and Create Upload Folder
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
+    app.config['IMAGES_FOLDER'] = os.path.join(app.root_path, 'static', 'images')
 
-    login_manager = LoginManager()
+    # Automatically create both folders if they are missing
+    for folder in [app.config['UPLOAD_FOLDER'], app.config['IMAGES_FOLDER']]:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        
+    app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB
 
+    # Initialize Extensions
     db.init_app(app)
+    migrate.init_app(app, db)
+    
+    login_manager = LoginManager()
     login_manager.init_app(app)
-
     login_manager.login_view = "auth.login"
 
     from .models import User
@@ -31,6 +45,7 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Register Blueprints
     from .auth import auth
     from .routes import routes
 

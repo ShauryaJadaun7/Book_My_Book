@@ -1,17 +1,165 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMyBook - Welcome Back</title>
 
-{% block title %}Login{% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
 
-{% block content %}
-<h2>Login</h2>
+<body style="
+    background:#ffffff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+    margin: 0;
+">
 
-<form method="POST">
-    <label>Email</label><br>
-    <input type="email" name="email" required><br><br>
+<div style="width:100%; max-width:450px; text-align:center;">
 
-    <label>Password</label><br>
-    <input type="password" name="password" required><br><br>
+    <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:12px;
+        margin-bottom:30px;
+    ">
+        <div style="
+            background:#fdf5e6;
+            color:#d68a1a;
+            padding:10px;
+            border-radius:10px;
+            font-size:22px;
+            border:1px solid #f2e6d0;
+        ">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
 
-    <button type="submit">Login</button>
-</form>
-{% endblock %}
+        <span style="
+            font-size:26px;
+            font-weight:700;
+            color:#2c2c2c;
+            font-family:Georgia, serif;
+        ">
+            BookMyBook
+        </span>
+    </div>
+
+    <div style="
+        background:#fdfaf5;
+        border:1px solid #f0e9dd;
+        border-radius:24px;
+        padding:45px 40px;
+    ">
+
+        <h2 style="
+            font-family:Georgia, serif;
+            font-size:24px;
+            margin-bottom:12px;
+            color:#333;
+        ">
+            Welcome Back
+        </h2>
+
+        <p style="
+            color:#7a7a7a;
+            font-size:15px;
+            margin-bottom:30px;
+        ">
+            Sign in to continue to your account
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="
+                margin-bottom:15px; 
+                padding:12px; 
+                border-radius:10px; 
+                font-size:14px; 
+                {% if category == 'error' %}background:#fdecea; color:#c0392b;{% else %}background:#e8f6ee; color:#27ae60;{% endif %}
+              ">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('auth.login') }}">
+
+            <div style="text-align:left; margin-bottom:22px;">
+                <label style="font-size:14px; color:#333; font-weight:500;">Email Address</label>
+                <div style="position:relative; margin-top:8px;">
+                    <i class="fa-regular fa-envelope"
+                       style="position:absolute; left:15px; top:14px; color:#9c9c9c;"></i>
+                    <input type="email" name="email" required
+                           placeholder="you@example.com"
+                           style="
+                            width:100%;
+                            padding:13px 13px 13px 45px;
+                            border:1px solid #e0e0e0;
+                            border-radius:10px;
+                            font-size:15px;
+                            outline:none;
+                            box-sizing: border-box;
+                           ">
+                </div>
+            </div>
+
+            <div style="text-align:left; margin-bottom:25px;">
+                <label style="font-size:14px; color:#333; font-weight:500;">Password</label>
+                <div style="position:relative; margin-top:8px;">
+                    <i class="fa-solid fa-lock"
+                       style="position:absolute; left:15px; top:14px; color:#9c9c9c;"></i>
+                    <input type="password" name="password" required
+                           placeholder="••••••••"
+                           style="
+                            width:100%;
+                            padding:13px 13px 13px 45px;
+                            border:1px solid #e0e0e0;
+                            border-radius:10px;
+                            font-size:15px;
+                            outline:none;
+                            box-sizing: border-box;
+                           ">
+                </div>
+            </div>
+
+            <button type="submit"
+                    style="
+                        width:100%;
+                        background:#d68a1a;
+                        color:white;
+                        border:none;
+                        padding:15px;
+                        border-radius:12px;
+                        font-size:16px;
+                        font-weight:600;
+                        cursor:pointer;
+                        transition: background 0.3s;
+                    ">
+                Login
+            </button>
+
+        </form>
+
+        <p style="
+            margin-top:28px;
+            font-size:15px;
+            color:#7a7a7a;
+        ">
+            Don't have an account?
+            <a href="{{ url_for('auth.Signup') }}"
+               style="color:#d68a1a; text-decoration:none; font-weight:600;">
+                 Sign up
+            </a>
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>
