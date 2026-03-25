@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 mt-4">
+        <div class="card shadow-lg border-0" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+            <div class="card-body p-4 text-center">
+                <h3 class="text-info fw-bold mb-3">Pay via UPI</h3>
+                <p class="text-white-50">You are paying for <strong class="text-white">{{ book.title }}</strong></p>
+                <div class="display-5 fw-bold text-success mb-4">₹{{ tx.amount|round(2) }}</div>
+
+                <div class="bg-white p-3 rounded mb-4 d-inline-block shadow">
+                    <!-- QR Code Image generated correctly -->
+                    <img src="{{ url_for('payments.upi_qr', tx_id=tx.id) }}" alt="UPI QR Code" class="img-fluid rounded"
+                        style="max-height: 250px;">
+                </div>
+
+                <p class="mb-4 text-muted small">
+                    Scan the QR code with any UPI app. <br>
+                    <strong>UPI ID:</strong> <span class="text-white user-select-all fw-bold fs-5 d-inline-block mt-2"
+                        style="cursor: pointer;" title="Copy to clipboard">{{ book.upi_id or book.owner.upi_id }}</span>
+                </p>
+
+                <hr class="border-secondary mb-4">
+
+                <h5 class="mb-3 text-white">Confirm Payment</h5>
+                <form action="{{ url_for('payments.upi_confirm', tx_id=tx.id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3 text-start">
+                        <label for="upi_ref" class="form-label text-white-50 small text-uppercase fw-bold">UPI Reference
+                            Number <span class="text-muted fw-normal">(Optional)</span></label>
+                        <input type="text" class="form-control form-control-lg bg-dark text-white border-secondary"
+                            id="upi_ref" name="upi_ref" placeholder="e.g. 12-digit UTR">
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill shadow-sm fw-bold mt-2"
+                        onclick="this.innerText='Confirming...'; this.classList.add('disabled', 'opacity-50');">
+                        ✅ I've Paid &ndash; Confirm
+                    </button>
+                    <div class="form-text mt-3 text-muted small">
+                        The seller will be notified to verify your payment immediately.
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('cart.view_cart') }}" class="text-info text-decoration-none fw-bold">&larr; Back to
+                Cart</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 mt-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">Join BookMyBook</h4>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted text-center mb-4">Register with your College Email and Phone Number to start buying and selling books.</p>
+                
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-4">
+                        {{ form.full_name.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.full_name(class="form-control form-control-lg", placeholder="John Doe") }}
+                        {% for error in form.full_name.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.email.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.email(class="form-control form-control-lg", placeholder="student@college.edu") }}
+                        {% for error in form.email.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.phone.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark text-muted border-secondary">+91</span>
+                            {{ form.phone(class="form-control form-control-lg", placeholder="9876543210") }}
+                        </div>
+                        {% for error in form.phone.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid mt-5">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-pill shadow") }}
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card-footer bg-transparent border-0 text-center mt-3">
+                <p class="text-muted mb-0">Already have an account? <a href="{{ url_for('auth.login') }}" class="text-info text-decoration-none fw-bold">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+/* BookMyBook Custom Dark Theme */
+
+:root {
+    --bmb-bg: #0a0f1c;
+    /* Deep navy */
+    --bmb-accent-teal: #00d4ff;
+    --bmb-accent-purple: #9d4edd;
+    --bmb-surface: #121a2f;
+    --bmb-border: #1e2943;
+}
+
+body {
+    background-color: var(--bmb-bg) !important;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Nav & Header */
+.navbar {
+    background: rgba(10, 15, 28, 0.85) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--bmb-border);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--bmb-accent-teal), var(--bmb-accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Cards & Books */
+.card {
+    background-color: var(--bmb-surface) !important;
+    border: 1px solid var(--bmb-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-5px) rotate(1deg);
+    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.15);
+    border-color: var(--bmb-accent-purple);
+}
+
+.book-cover-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.book-cover {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.book-card:hover .book-cover {
+    transform: scale(1.05);
+    /* Slight zoom on hover */
+}
+
+/* Glowing Badges */
+.badge-buy {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--bmb-accent-teal);
+    border: 1px solid var(--bmb-accent-teal);
+}
+
+.badge-borrow {
+    background: rgba(157, 78, 221, 0.15);
+    color: var(--bmb-accent-purple);
+    border: 1px solid var(--bmb-accent-purple);
+}
+
+.badge-barter {
+    background: rgba(255, 159, 28, 0.15);
+    color: #ff9f1c;
+    border: 1px solid #ff9f1c;
+}
+
+.quick-actions {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 15, 28, 0.9);
+    padding: 10px;
+    transition: bottom 0.3s ease;
+    display: flex;
+    justify-content: space-around;
+}
+
+.book-cover-wrapper:hover .quick-actions {
+    bottom: 0;
+}
+
+/* Inputs & Forms */
+.form-control {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--bmb-border);
+    color: white !important;
+}
+
+.form-control:focus {
+    border-color: var(--bmb-accent-teal);
+    box-shadow: 0 0 0 0.25rem rgba(0, 212, 255, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(45deg, var(--bmb-accent-teal), var(--bmb-accent-purple));
+    border: none;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
+}
+
+/* General Layout Tweaks */
+.page-title {
+    font-weight: 800;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 4px;
+    background: var(--bmb-accent-teal);
+    border-radius: 2px;
+}
+
+.book-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 212, 255, 0.15) !important;
+}
+
+.book-cover {
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.book-card:hover .book-cover {
+    transform: scale(1.05);
+}
+
+.quick-actions {
+    transition: opacity 0.3s ease;
+}
+
+.book-card:hover .quick-actions {
+    opacity: 1;
+}
+
+.book-cover-placeholder {
+    height: 280px;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+}

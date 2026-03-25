@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="text-center mb-4">
+            <h1 class="page-title">Post a Book</h1>
+            <p class="text-muted">Fill out the details below to list your book for sale, borrow, or barter.</p>
+        </div>
+
+        <div class="card p-4 shadow-lg border-0" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+            <div class="card-body">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            {{ form.title.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                            {{ form.title(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="Book Title") }}
+                            {% for error in form.title.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.author.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                            {{ form.author(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="Author Name") }}
+                            {% for error in form.author.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.description(class="form-control bg-dark text-white border-secondary", rows="3", placeholder="Condition, edition, or other details...") }}
+                        {% for error in form.description.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.cover_image.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.cover_image(class="form-control bg-dark text-white border-secondary") }}
+                        <div class="form-text text-muted">Upload a clear photo of the cover (JPG, PNG).</div>
+                        {% for error in form.cover_image.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <hr class="border-secondary my-4">
+
+                    <h5 class="text-info mb-3">Listing Options</h5>
+                    <p class="text-muted small mb-4">Select at least one option to proceed.</p>
+
+                    <!-- Row 1: Sale Option -->
+                    <div class="row align-items-center mb-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="col-md-5">
+                            <div class="form-check form-switch">
+                                {{ form.is_for_sale(class="form-check-input", role="switch", id="flexSwitchSale") }}
+                                {{ form.is_for_sale.label(class="form-check-label fw-bold text-white", for="flexSwitchSale") }}
+                            </div>
+                        </div>
+                        <div class="col-md-7 mt-2 mt-md-0">
+                            {{ form.price(class="form-control bg-dark text-white border-secondary", placeholder="Sale Price (₹)") }}
+                            {% for error in form.price.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Borrow Option -->
+                    <div class="row align-items-center mb-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="col-md-5">
+                            <div class="form-check form-switch">
+                                {{ form.is_for_borrow(class="form-check-input", role="switch", id="flexSwitchBorrow") }}
+                                {{ form.is_for_borrow.label(class="form-check-label fw-bold text-white", for="flexSwitchBorrow") }}
+                            </div>
+                        </div>
+                        <div class="col-md-7 mt-2 mt-md-0">
+                            {{ form.borrow_fee_per_day(class="form-control bg-dark text-white border-secondary", placeholder="Borrow Fee Rate (₹/day)") }}
+                            {% for error in form.borrow_fee_per_day.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Barter Option -->
+                    <div class="row align-items-center mb-4 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="col-md-5">
+                            <div class="form-check form-switch">
+                                {{ form.is_for_barter(class="form-check-input", role="switch", id="flexSwitchBarter") }}
+                                {{ form.is_for_barter.label(class="form-check-label fw-bold text-white", for="flexSwitchBarter") }}
+                            </div>
+                        </div>
+                        <div class="col-md-7 mt-2 mt-md-0">
+                            {{ form.barter_preferences(class="form-control bg-dark text-white border-secondary", rows="2", placeholder="Preferences (e.g. genre or specific book)") }}
+                            {% for error in form.barter_preferences.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- General errors like 'Select at least one option' -->
+                    {% if form.is_for_sale.errors %}
+                        {% for error in form.is_for_sale.errors %}
+                            {% if 'Select at least one option' in error %}
+                                <div class="alert alert-danger py-2">{{ error }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <hr class="border-secondary my-4">
+
+                    <h5 class="text-warning mb-3">Payment Details</h5>
+                    <div class="mb-4">
+                        {{ form.upi_id.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.upi_id(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="yourname@upi") }}
+                        <div class="form-text text-muted">Required if you are selling or offering the book for borrow. Buyers will pay this UPI immediately.</div>
+                        {% for error in form.upi_id.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-pill shadow") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

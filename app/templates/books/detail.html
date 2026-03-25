@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('books.index') }}" class="text-decoration-none text-info">Discover Books</a></li>
+                <li class="breadcrumb-item active text-white-50" aria-current="page">{{ book.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="card p-4 p-md-5 shadow-lg border-0 mb-5" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+            <div class="row g-5">
+                <!-- Book Cover Side -->
+                <div class="col-md-5 col-lg-4 text-center">
+                    {% if book.cover_image %}
+                    <img src="{{ url_for('static', filename='covers/' ~ book.cover_image) }}" class="img-fluid rounded shadow-lg" alt="{{ book.title }}">
+                    {% else %}
+                    <div class="bg-dark rounded shadow-lg d-flex align-items-center justify-content-center border border-secondary" style="height: 400px; width: 100%;">
+                        <div class="text-center text-muted">
+                            <i class="bi bi-book" style="font-size: 5rem;"></i>
+                            <p class="mt-3">No Cover Available</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Owner Info Below Cover -->
+                    <div class="mt-4 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                        <p class="text-white-50 small text-uppercase fw-bold mb-1">Listed By</p>
+                        <h6 class="text-white mb-0">{{ book.owner.full_name or book.owner.email.split('@')[0] }}</h6>
+                        {% if book.owner.average_rating %}
+                        <div class="text-warning small mt-1">★ {{ "%.1f"|format(book.owner.average_rating) }} Rating</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Book Details Side -->
+                <div class="col-md-7 col-lg-8">
+                    <h1 class="display-5 fw-bold text-white mb-1">{{ book.title }}</h1>
+                    <h4 class="text-white-50 mb-4">{{ book.author }}</h4>
+
+                    <div class="mb-4">
+                        <p class="text-white fs-5" style="line-height: 1.6;">
+                            {{ book.description or "No description provided." }}
+                        </p>
+                    </div>
+
+                    <hr class="border-secondary my-4">
+
+                    <!-- Actions -->
+                    <h5 class="text-info mb-4">Availability Options</h5>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        {% if book.is_for_sale %}
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded border border-success bg-success bg-opacity-10">
+                            <div>
+                                <h5 class="text-success mb-0 d-flex align-items-center">
+                                    <span class="badge bg-success me-2">Sale</span> ₹{{ book.price|round(2) }}
+                                </h5>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.id != book.owner_id %}
+                            <form method="POST" action="{{ url_for('cart.add', book_id=book.id) }}" class="m-0 p-0" hx-post="{{ url_for('cart.add', book_id=book.id) }}" hx-swap="none">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-success px-4 rounded-pill shadow">
+                                    Add to Cart
+                                </button>
+                            </form>
+                            {% elif not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success px-4 rounded-pill">Login to Buy</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if book.is_for_borrow %}
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded border border-info bg-info bg-opacity-10">
+                            <div>
+                                <h5 class="text-info mb-0 d-flex align-items-center">
+                                    <span class="badge bg-info me-2">Borrow</span> ₹{{ book.borrow_fee_per_day|round(2) }}/day
+                                </h5>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.id != book.owner_id %}
+                            <button class="btn btn-info text-white px-4 rounded-pill shadow" data-bs-toggle="modal" data-bs-target="#borrowModal{{ book.id }}">
+                                Request Borrow
+                            </button>
+                            {% elif not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-info px-4 rounded-pill">Login to Borrow</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if book.is_for_barter %}
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded border border-warning bg-warning bg-opacity-10">
+                            <div>
+                                <h5 class="text-warning mb-1 d-flex align-items-center">
+                                    <span class="badge bg-warning text-dark me-2">Barter</span> Replace with a Book
+                                </h5>
+                                {% if book.barter_preferences %}
+                                <p class="text-white-50 small mb-0 mt-2"><strong>Preferences:</strong> {{ book.barter_preferences }}</p>
+                                {% endif %}
+                            </div>
+                            {% if current_user.is_authenticated and current_user.id != book.owner_id %}
+                            <button class="btn btn-warning text-dark px-4 rounded-pill shadow" data-bs-toggle="modal" data-bs-target="#barterModal{{ book.id }}">
+                                Propose Barter
+                            </button>
+                            {% elif not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-warning px-4 rounded-pill">Login to Barter</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if current_user.is_authenticated and current_user.id == book.owner_id %}
+                    <div class="alert alert-secondary mt-4 py-2 border-0 bg-secondary bg-opacity-25 text-center">
+                        <i class="bi bi-info-circle me-2"></i> This is your own listing. Options are disabled.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Borrow Modal -->
+{% if book.is_for_borrow %}
+<div class="modal fade" id="borrowModal{{ book.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white" style="border: 1px solid var(--bmb-accent-purple);">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-info">Borrow: {{ book.title }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('borrows.request_borrow', book_id=book.id) }}" method="POST">
+                <div class="modal-body">
+                    <p class="text-white-50 small mb-4">
+                        The owner charges <strong>₹{{ book.borrow_fee_per_day|round(2) }}/day</strong> for this book.
+                    </p>
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase small fw-bold text-info">How many days?</label>
+                        <input type="number" class="form-control form-control-lg bg-dark text-white border-secondary" name="requested_days" min="1" max="30" value="7" required>
+                        <div class="form-text text-muted mt-2">Maximum limit is typically 30 days.</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Barter Modal -->
+{% if book.is_for_barter and current_user.is_authenticated %}
+<div class="modal fade" id="barterModal{{ book.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white" style="border: 1px solid var(--bmb-accent-purple);">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-warning">Propose Barter for: {{ book.title }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('proposals.propose', book_id=book.id) }}" method="POST">
+                <div class="modal-body">
+                    {% if current_user.books.filter_by(is_for_barter=True).count() > 0 %}
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase small fw-bold text-warning">Select a book to offer in exchange</label>
+                        <select class="form-select form-select-lg bg-dark text-white border-secondary" name="offered_book_id" required>
+                            <option value="">-- Choose Book --</option>
+                            {% for my_book in current_user.books %}
+                                {% if my_book.is_for_barter %}
+                                <option value="{{ my_book.id }}">{{ my_book.title }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning py-2 mb-3">
+                        You do not have any books listed for barter. Please upload a book and set it available for barter first!
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    {% if current_user.books.filter_by(is_for_barter=True).count() > 0 %}
+                    <button type="submit" class="btn btn-warning text-dark">Send Proposal</button>
+                    {% else %}
+                    <a href="{{ url_for('books.upload') }}" class="btn btn-warning text-dark">Upload a Book</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Global Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+    <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fw-bold" id="toastMessage">
+                <!-- Message inserted by JS -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showToast(message, type) {
+        const toastEl = document.getElementById('liveToast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        if (type === 'success') {
+            toastEl.className = 'toast align-items-center text-bg-success border-0';
+        } else if (type === 'danger') {
+             toastEl.className = 'toast align-items-center text-bg-danger border-0';
+        }
+
+        toastMessage.innerHTML = message;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+</script>
+{% endblock %}

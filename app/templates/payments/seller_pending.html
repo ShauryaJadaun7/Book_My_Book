@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">⏳ Pending Payments</h2>
+    <span class="badge bg-warning text-dark fs-6">{{ transactions|length }} Awaiting</span>
+</div>
+
+{% if not transactions %}
+    <div class="text-center text-muted py-5">
+        <div style="font-size: 3rem;">💸</div>
+        <p class="mt-2 text-secondary">You have no pending payments to confirm.</p>
+    </div>
+{% else %}
+<div class="row row-cols-1 row-cols-lg-2 g-4">
+    {% for tx in transactions %}
+    <div class="col">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold text-primary mb-1">{{ tx.book.title }}</h5>
+                        <p class="mb-0 text-muted small">Buyer: {{ tx.buyer.full_name or tx.buyer.email }}</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="fs-5 fw-bold text-success">₹{{ tx.amount|round(2) }}</span>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded mb-4">
+                    <p class="mb-1 small">
+                        <strong>Status:</strong> <span class="badge bg-warning text-dark">Buyer Confirmed</span>
+                    </p>
+                    <p class="mb-1 small">
+                        <strong>Confirmed At:</strong> {{ tx.buyer_confirmed_at.strftime('%d %b %Y, %I:%M %p') }}
+                    </p>
+                    <p class="mb-0 small">
+                        <strong>UPI Ref/UTR:</strong> 
+                        {% if tx.upi_ref %}
+                            <span class="font-monospace">{{ tx.upi_ref }}</span>
+                        {% else %}
+                            <span class="text-muted fst-italic">Not provided</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('payments.upi_seller_confirm', tx_id=tx.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm"
+                            onclick="return confirm('Ensure you have received ₹{{ tx.amount|round(2) }} in your bank account before verifying. Proceed?');">
+                        ✅ Mark as Received
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

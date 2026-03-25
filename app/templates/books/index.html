@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-end mb-5 border-bottom border-dark pb-3">
+    <div>
+        <h2 class="page-title mb-1">Discover Books</h2>
+        <p class="text-muted mb-0">Explore what your campus is reading.</p>
+    </div>
+    <a href="{{ url_for('books.upload') }}" class="btn btn-outline-primary rounded-pill px-4">
+        + Post a Book
+    </a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 pb-5">
+    {% for book in books %}
+    <div class="col">
+        <div class="card h-100 book-card position-relative shadow border-0 overflow-hidden">
+
+            <!-- Cover image with hover actions -->
+            <div class="book-cover-wrapper">
+                {% if book.cover_image %}
+                <img src="{{ url_for('static', filename='covers/' ~ book.cover_image) }}" class="book-cover"
+                    alt="{{ book.title }}">
+                {% else %}
+                <div
+                    class="book-cover d-flex align-items-center justify-content-center bg-dark text-muted border-bottom border-secondary">
+                    <i class="bi bi-book fs-1"></i>
+                    <span class="ms-2">No Cover</span>
+                </div>
+                {% endif %}
+
+                <!-- Hover Quick Actions -->
+                <div class="quick-actions rounded-top shadow-lg">
+                    {% if book.is_for_sale %}
+                    <!-- HTMX POST to Cart. We prevent redirect by handling the click if we want, or adjust backend -->
+                    <form method="POST" action="{{ url_for('cart.add', book_id=book.id) }}" class="m-0 p-0"
+                        hx-post="{{ url_for('cart.add', book_id=book.id) }}" hx-swap="none">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-success rounded-circle" title="Add to Cart">
+                            🛒
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    {% if book.is_for_borrow %}
+                    <button class="btn btn-sm btn-info rounded-circle text-white" title="Request Borrow"
+                        data-bs-toggle="modal" data-bs-target="#borrowModal{{ book.id }}">
+                        📅
+                    </button>
+                    {% endif %}
+
+                    {% if book.is_for_barter %}
+                    <a href="{{ url_for('books.detail', book_id=book.id) }}"
+                        class="btn btn-sm btn-warning rounded-circle" title="Propose Barter">
+                        🔄
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+                <a href="{{ url_for('books.detail', book_id=book.id) }}"
+                    class="text-decoration-none text-light stretched-link">
+                    <h5 class="card-title fw-bold mb-1 text-truncate" title="{{ book.title }}">{{ book.title }}</h5>
+                </a>
+                <h6 class="card-subtitle mb-3 text-white-50 small">{{ book.author }}</h6>
+
+                <div class="mt-auto d-flex flex-wrap gap-2">
+                    {% if book.is_for_sale %}
+                    <span class="badge badge-buy rounded-pill fs-7 px-3 py-2">₹{{ book.price|round(2) }}</span>
+                    {% endif %}
+                    {% if book.is_for_borrow %}
+                    <span class="badge badge-borrow rounded-pill fs-7 px-3 py-2">Borrow</span>
+                    {% endif %}
+                    {% if book.is_for_barter %}
+                    <span class="badge badge-barter rounded-pill fs-7 px-3 py-2">Barter</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div
+                class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex justify-content-between align-items-center">
+                <div class="small text-muted">
+                    <span class="text-warning">★</span>
+                    {{ "%.1f"|format(book.owner.average_rating) if book.owner.average_rating else "New" }}
+                </div>
+                <!-- Optional owner name or initials -->
+                <div class="small text-muted text-truncate ms-3" style="max-width: 100px;">
+                    {{ book.owner.full_name or book.owner.email.split('@')[0] }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Borrow Modal for this book -->
+    {% if book.is_for_borrow %}
+    <div class="modal fade" id="borrowModal{{ book.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white" style="border: 1px solid var(--bmb-accent-purple);">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Borrow: {{ book.title }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('borrows.request_borrow', book_id=book.id) }}" method="POST">
+                    <div class="modal-body">
+                        <p class="text-white-50 small mb-4">
+                            The owner charges <strong>₹{{ book.borrow_fee_per_day|round(2) }}/day</strong> for this
+                            book.
+                        </p>
+                        <div class="mb-3">
+                            <label class="form-label text-uppercase small fw-bold text-info">How many days?</label>
+                            <input type="number"
+                                class="form-control form-control-lg bg-dark text-white border-secondary"
+                                name="requested_days" min="1" max="30" value="7" required>
+                            <div class="form-text text-muted mt-2">Maximum limit is usually 30 days.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="display-1 text-muted opacity-25 mb-3">📚</div>
+        <h3 class="text-muted">The library is completely empty.</h3>
+        <p class="text-white-50">Be the first to upload a book and start the campus marketplace!</p>
+        <a href="{{ url_for('books.upload') }}" class="btn btn-primary rounded-pill mt-3 px-4">Upload Now</a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Global Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+    <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fw-bold" id="toastMessage">
+                <!-- Message inserted by JS -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Minimal JS to trigger a toast visually since the backend redirect will reload anyway
+    // Or if HTMX halts the reload, this JS will show the toast natively.
+    function showToast(message, type) {
+        const toastEl = document.getElementById('liveToast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Update styling based on type
+        if (type === 'success') {
+            toastEl.className = 'toast align-items-center text-bg-success border-0';
+        } else if (type === 'danger') {
+            toastEl.className = 'toast align-items-center text-bg-danger border-0';
+        }
+
+        toastMessage.innerHTML = message;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+
+    // Listen for HTMX custom trigger event just in case we wire it in the backend
+    document.body.addEventListener("cartUpdated", function (evt) {
+        showToast(evt.detail.value, 'success');
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+.env
+.venv
+venv
+__pycache__/
+*.pyc
+*.pyo
+.vscode/
+.idea/
+test_real_otp.py
+test_otp.py

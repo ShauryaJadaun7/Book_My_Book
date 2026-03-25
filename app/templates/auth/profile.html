@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Profile Info</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.profile') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="text" class="form-control" value="{{ current_user.email }}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.full_name.label(class="form-label") }}
+                        {{ form.full_name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control") }}
+                    </div>
+                    {{ form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Change Password</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.profile') }}">
+                    {{ password_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ password_form.old_password.label(class="form-label") }}
+                        {{ password_form.old_password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ password_form.new_password.label(class="form-label") }}
+                        {{ password_form.new_password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ password_form.confirm.label(class="form-label") }}
+                        {{ password_form.confirm(class="form-control") }}
+                    </div>
+                    {{ password_form.submit(class="btn btn-secondary w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Seller Account (Get Paid)</h5>
+            </div>
+            <div class="card-body">
+                {% if current_user.upi_id %}
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle-fill"></i> Your UPI ID is configured! You can receive payments directly.
+                    </div>
+                    <p class="text-muted small">Current UPI ID: <strong>{{ current_user.upi_id }}</strong></p>
+                    <hr>
+                    <p class="small text-muted mb-3">Update your UPI ID:</p>
+                {% else %}
+                    <p class="small text-muted mb-3">
+                        Set your UPI ID to receive payments directly when someone buys your books.
+                    </p>
+                {% endif %}
+                <form method="POST" action="{{ url_for('auth.profile') }}">
+                    {{ onboard_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ onboard_form.upi_id.label(class="form-label") }}
+                        {{ onboard_form.upi_id(class="form-control", placeholder="your_upi_id@bank") }}
+                    </div>
+                    {{ onboard_form.submit(class="btn btn-success w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

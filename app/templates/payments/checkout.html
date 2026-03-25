@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center mt-5">
+        <div class="card shadow-lg border-0" style="background: rgba(18, 26, 47, 0.8);">
+            <div class="card-header bg-transparent pt-4 pb-2 border-secondary">
+                <h4 class="text-info">Checkout - Pay via UPI</h4>
+                <p class="text-white-50 small mb-0">Your items have been processed. Please pay the sellers directly using their UPI QR code.</p>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush text-start">
+                    {% for tx in transactions %}
+                    <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center p-4 border-secondary text-white">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-info">{{ tx.book.title }}</h6>
+                            <span class="text-white-50">₹{{ tx.amount|round(2) }}</span>
+                        </div>
+                        {% if tx.book.upi_id or tx.book.owner.upi_id %}
+                        <a href="{{ url_for('payments.upi_checkout', tx_id=tx.id) }}" class="btn btn-outline-success btn-sm px-3 rounded-pill">
+                            Pay via UPI
+                        </a>
+                        {% else %}
+                        <span class="badge bg-secondary text-light border-0">UPI Not Enabled</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
