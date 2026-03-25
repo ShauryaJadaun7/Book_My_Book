@@ -5,7 +5,7 @@ A college-only book sharing marketplace (buy, borrow, barter).
 ## Features
 - OTP-based registration
 - College email domain restriction
-- Buy books with Razorpay integration
+- Buy books using upi qr code
 - Borrow books with star rating approval and automated late fees
 - Barter books with specific/general preferences
 - Rating system
