@@ -19,7 +19,7 @@
             <!-- Cover image with hover actions -->
             <div class="book-cover-wrapper">
                 {% if book.cover_image %}
-                <img src="{{ url_for('static', filename='covers/' ~ book.cover_image) }}" class="book-cover"
+                <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover"
                     alt="{{ book.title }}">
                 {% else %}
                 <div
@@ -103,6 +103,7 @@
                         aria-label="Close"></button>
                 </div>
                 <form action="{{ url_for('borrows.request_borrow', book_id=book.id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="modal-body">
                         <p class="text-white-50 small mb-4">
                             The owner charges <strong>₹{{ book.borrow_fee_per_day|round(2) }}/day</strong> for this

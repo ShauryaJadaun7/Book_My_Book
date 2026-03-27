@@ -15,7 +15,7 @@
                 <!-- Book Cover Side -->
                 <div class="col-md-5 col-lg-4 text-center">
                     {% if book.cover_image %}
-                    <img src="{{ url_for('static', filename='covers/' ~ book.cover_image) }}" class="img-fluid rounded shadow-lg" alt="{{ book.title }}">
+                    <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="img-fluid rounded shadow-lg" alt="{{ book.title }}">
                     {% else %}
                     <div class="bg-dark rounded shadow-lg d-flex align-items-center justify-content-center border border-secondary" style="height: 400px; width: 100%;">
                         <div class="text-center text-muted">
@@ -131,6 +131,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ url_for('borrows.request_borrow', book_id=book.id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
                     <p class="text-white-50 small mb-4">
                         The owner charges <strong>₹{{ book.borrow_fee_per_day|round(2) }}/day</strong> for this book.
@@ -160,13 +161,15 @@
                 <h5 class="modal-title text-warning">Propose Barter for: {{ book.title }}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ url_for('proposals.propose', book_id=book.id) }}" method="POST">
+            <form action="{{ url_for('proposals.propose', book_id=book.id) }}" method="POST" id="barterForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
                 <div class="modal-body">
                     {% if current_user.books.filter_by(is_for_barter=True).count() > 0 %}
-                    <div class="mb-3">
-                        <label class="form-label text-uppercase small fw-bold text-warning">Select a book to offer in exchange</label>
-                        <select class="form-select form-select-lg bg-dark text-white border-secondary" name="offered_book_id" required>
-                            <option value="">-- Choose Book --</option>
+                    <div class="mb-4">
+                        <label class="form-label text-uppercase small fw-bold text-warning">Select an existing book</label>
+                        <select class="form-select bg-dark text-white border-secondary" name="offered_book_id" id="offered_book_select">
+                            <option value="">-- Or add new below --</option>
                             {% for my_book in current_user.books %}
                                 {% if my_book.is_for_barter %}
                                 <option value="{{ my_book.id }}">{{ my_book.title }}</option>
@@ -175,18 +178,26 @@
                         </select>
                     </div>
                     {% else %}
-                    <div class="alert alert-warning py-2 mb-3">
-                        You do not have any books listed for barter. Please upload a book and set it available for barter first!
+                    <div class="alert alert-warning py-2 mb-3 small border-0 bg-warning bg-opacity-10 text-warning">
+                        You don't have any books listed for barter yet. You can instantly create one below to offer it!
                     </div>
                     {% endif %}
+                    
+                    <div class="p-3 rounded border border-secondary" style="background: rgba(0,0,0,0.2);">
+                        <label class="form-label text-uppercase small fw-bold text-info"><i class="bi bi-plus-circle me-1"></i> Quick Add New Book to Offer</label>
+                        <input type="text" name="new_book_title" id="new_book_title" class="form-control form-control-sm bg-dark text-white border-secondary mb-2" placeholder="Book Title">
+                        <input type="text" name="new_book_author" id="new_book_author" class="form-control form-control-sm bg-dark text-white border-secondary mb-2" placeholder="Author Name">
+                        <textarea name="new_book_description" id="new_book_description" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Description of condition, edition, etc." rows="2"></textarea>
+                        <p class="text-white-50 mt-2 mb-0" style="font-size: 0.75rem;">* If you add a new book here, it will automatically be listed on your profile.</p>
+                    </div>
+                </div>
+                <!-- JS Validation Alert -->
+                <div class="px-3" id="barterFormAlert" style="display: none;">
+                    <div class="alert alert-danger py-2 small mb-0">Please fill out Title, Author, and Description to add a new book.</div>
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    {% if current_user.books.filter_by(is_for_barter=True).count() > 0 %}
                     <button type="submit" class="btn btn-warning text-dark">Send Proposal</button>
-                    {% else %}
-                    <a href="{{ url_for('books.upload') }}" class="btn btn-warning text-dark">Upload a Book</a>
-                    {% endif %}
                 </div>
             </form>
         </div>
@@ -221,5 +232,33 @@
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const barterForm = document.getElementById('barterForm');
+        if (barterForm) {
+            barterForm.addEventListener('submit', function(e) {
+                const selectElement = document.getElementById('offered_book_select');
+                const title = document.getElementById('new_book_title').value.trim();
+                const author = document.getElementById('new_book_author').value.trim();
+                const desc = document.getElementById('new_book_description').value.trim();
+                const alertBox = document.getElementById('barterFormAlert');
+                
+                let selectedId = "";
+                if (selectElement) {
+                    selectedId = selectElement.value;
+                }
+                
+                // If no existing book selected, make sure all new book fields are filled
+                if (!selectedId) {
+                    if (!title || !author || !desc) {
+                        e.preventDefault();
+                        alertBox.style.display = 'block';
+                        return false;
+                    }
+                }
+                alertBox.style.display = 'none';
+            });
+        }
+    });
 </script>
 {% endblock %}

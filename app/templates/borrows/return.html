@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card p-4 p-md-5 shadow-lg border-0 mb-5" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+            <h2 class="page-title text-white mb-4">Return Book: {{ data.record.book.title }}</h2>
+            
+            <div class="alert alert-info py-3 mb-4">
+                <h5 class="alert-heading text-info d-flex align-items-center">
+                    <i class="bi bi-info-circle me-2"></i> Borrow Details
+                </h5>
+                <hr class="border-info opacity-25">
+                <div class="row mt-3">
+                    <div class="col-sm-6 mb-2">
+                        <strong class="text-white-50 small text-uppercase">Borrowed On:</strong><br>
+                        <span class="text-white">{{ data.record.start_date.strftime('%B %d, %Y') if data.record.start_date else 'N/A' }}</span>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <strong class="text-white-50 small text-uppercase">Days Kept:</strong><br>
+                        <span class="text-white fw-bold">{{ data.days_kept }} Day(s)</span>
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <strong class="text-white-50 small text-uppercase">Rate:</strong><br>
+                        <span class="text-white">₹{{ data.record.book.borrow_fee_per_day|round(2) }}/day</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-dark border-secondary p-4 mb-4">
+                <h5 class="text-white mb-3">Payment Summary</h5>
+                <div class="d-flex justify-content-between mb-2 text-white-50">
+                    <span>Borrow Fee ({{ data.days_kept }} days)</span>
+                    <span>₹{{ data.borrow_fee|round(2) }}</span>
+                </div>
+                {% if data.late_fee > 0 %}
+                <div class="d-flex justify-content-between mb-2 text-danger">
+                    <span>Late Fee</span>
+                    <span>₹{{ data.late_fee|round(2) }}</span>
+                </div>
+                {% endif %}
+                <hr class="border-secondary my-3">
+                <div class="d-flex justify-content-between text-white align-items-center">
+                    <span class="fs-5 fw-bold">Total Amount Due</span>
+                    <span class="fs-3 fw-bold text-success">₹{{ data.total|round(2) }}</span>
+                </div>
+            </div>
+
+            <p class="text-white-50 small mb-4">
+                Please make sure to hand the book back to the owner and complete the payment of <strong>₹{{ data.total|round(2) }}</strong>. Once you have done this, click the button below to mark it as returned.
+            </p>
+
+            <form method="POST" action="{{ url_for('borrows.return_book', record_id=data.record.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill shadow-sm fw-bold">
+                    I Have Paid & Returned the Book
+                </button>
+                <a href="{{ url_for('core.index') }}" class="btn btn-outline-secondary w-100 rounded-pill shadow-sm mt-3">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

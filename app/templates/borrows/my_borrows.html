@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="page-title text-white mb-4">My Borrowed Books</h2>
+
+<ul class="nav nav-tabs mb-4" id="myBorrowTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active bg-dark border-secondary text-info fw-bold" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-tab-pane" type="button" role="tab" aria-controls="active-tab-pane" aria-selected="true">
+        Active Borrows 
+        {% if active_borrows %}<span class="badge bg-info text-dark ms-2">{{ active_borrows|length }}</span>{% endif %}
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link bg-dark border-secondary text-white-50 fw-bold" id="past-tab" data-bs-toggle="tab" data-bs-target="#past-tab-pane" type="button" role="tab" aria-controls="past-tab-pane" aria-selected="false">
+        Past History
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content" id="myBorrowTabsContent">
+  
+  <!-- ACTIVE BORROWS -->
+  <div class="tab-pane fade show active" id="active-tab-pane" role="tabpanel" aria-labelledby="active-tab" tabindex="0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for borrow in active_borrows %}
+        <div class="col">
+            <div class="card h-100 bg-dark border-{% if borrow.status == 'RETURN_PENDING_CONFIRMATION' %}warning{% else %}secondary{% endif %} shadow-lg">
+                <div class="card-body">
+                    <h5 class="card-title text-white fw-bold">{{ borrow.book.title }}</h5>
+                    <p class="text-white-50 small mb-3">Owner: {{ borrow.book.owner.full_name or borrow.book.owner.email }}</p>
+                    
+                    <ul class="list-group list-group-flush mb-3 rounded">
+                        <li class="list-group-item bg-transparent text-white-50 px-0 d-flex justify-content-between">
+                            <span>Borrowed On:</span>
+                            <span class="text-white">{{ borrow.start_date.strftime('%b %d, %Y') if borrow.start_date else 'Pending' }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white-50 px-0 d-flex justify-content-between">
+                            <span>Due By:</span>
+                            <span class="text-white">{{ borrow.due_date.strftime('%b %d, %Y') if borrow.due_date else 'Pending' }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-white-50 px-0 d-flex justify-content-between">
+                            <span>Rate:</span>
+                            <span class="text-white fw-bold">₹{{ borrow.book.borrow_fee_per_day|round(2) }}/day</span>
+                        </li>
+                    </ul>
+                    
+                    {% if borrow.status == 'RETURN_PENDING_CONFIRMATION' %}
+                        <div class="alert alert-warning py-2 small mb-0 mt-auto border-0 bg-warning bg-opacity-10 text-warning text-center">
+                            Return pending owner confirmation.
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('borrows.return_book', record_id=borrow.id) }}" class="btn btn-outline-info w-100 mt-auto rounded-pill shadow-sm">
+                            Return Book Now
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-white-50">You aren't borrowing any books right now.</h4>
+            <a href="{{ url_for('books.index') }}" class="btn btn-info mt-3 rounded-pill text-white">Find Books to Borrow</a>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+  
+  <!-- PAST HISTORY -->
+  <div class="tab-pane fade" id="past-tab-pane" role="tabpanel" aria-labelledby="past-tab" tabindex="0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for borrow in past_borrows %}
+        <div class="col">
+            <div class="card h-100 bg-dark border-secondary shadow-lg opacity-75">
+                <div class="card-body">
+                    <h5 class="card-title text-white-50 fw-bold">{{ borrow.book.title }}</h5>
+                    <p class="text-muted small mb-3">Owner: {{ borrow.book.owner.full_name or borrow.book.owner.email }}</p>
+                    
+                    <ul class="list-group list-group-flush mb-0 rounded">
+                        <li class="list-group-item bg-transparent text-muted px-0 d-flex justify-content-between">
+                            <span>Returned On:</span>
+                            <span>{{ borrow.returned_date.strftime('%b %d, %Y') if borrow.returned_date else 'N/A' }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-muted px-0 d-flex justify-content-between">
+                            <span>Late Fee Fixed:</span>
+                            <span>₹{{ borrow.late_fee_accrued|round(2) if borrow.late_fee_accrued else '0.00' }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-3 text-center">
+                    <span class="badge bg-secondary text-dark px-3 py-2 rounded-pill">Successfully Returned</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <p class="text-white-50">Your return history is empty.</p>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

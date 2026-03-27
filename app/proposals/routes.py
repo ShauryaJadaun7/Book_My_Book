@@ -9,6 +9,30 @@ from ..models import Proposal, Book
 @login_required
 def propose(book_id):
     offered_book_id = request.form.get('offered_book_id')
+    
+    # Quick Upload Logic
+    new_book_title = request.form.get('new_book_title', '').strip()
+    new_book_author = request.form.get('new_book_author', '').strip()
+    new_book_description = request.form.get('new_book_description', '').strip()
+    
+    if not offered_book_id:
+        if not new_book_title or not new_book_author or not new_book_description:
+            flash("You must either select an existing book or fill out the Title, Author, and Description for a new book.", "danger")
+            return redirect(url_for('books.detail', book_id=book_id))
+            
+        new_book = Book(
+            title=new_book_title,
+            author=new_book_author,
+            description=new_book_description,
+            owner_id=current_user.id,
+            is_for_barter=True,
+            is_available=True
+        )
+        from ..extensions import db
+        db.session.add(new_book)
+        db.session.commit()
+        offered_book_id = new_book.id
+    
     offered_cash = request.form.get('offered_cash', 0.0)
     message = request.form.get('message', '')
 

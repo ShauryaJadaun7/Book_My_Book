@@ -120,16 +120,60 @@ def return_borrow(record_id, borrower_id):
         return False, None, "Cannot return this book."
 
     now = datetime.now(timezone.utc)
+    
+    # Calculate exactly how many days the user kept the book
+    if record.start_date:
+        start_date = record.start_date.replace(tzinfo=timezone.utc) if record.start_date.tzinfo is None else record.start_date
+        days_kept = (now - start_date).days
+        if days_kept < 1:
+            days_kept = 1
+    else:
+        days_kept = 1
+
     late_fee = 0.0
-    if record.due_date and now > record.due_date:
-        days_late = (now - record.due_date).days + 1
-        late_fee = days_late * 5.0  # ₹5 per day late fee
+    if record.due_date:
+        due_date = record.due_date.replace(tzinfo=timezone.utc) if record.due_date.tzinfo is None else record.due_date
+        if now > due_date:
+            days_late = (now - due_date).days + 1
+            late_fee = days_late * 5.0  # ₹5 per day late fee
 
     record.late_fee_accrued = late_fee
     db.session.commit()
 
     book = db.session.get(Book, record.book_id)
-    borrow_fee = (book.borrow_fee_per_day or 0.0) * record.requested_days
+    borrow_fee = (book.borrow_fee_per_day or 0.0) * days_kept
     total_fee = borrow_fee + late_fee
+    
+    data = {
+        "borrow_fee": borrow_fee, 
+        "late_fee": late_fee, 
+        "total": total_fee, 
+        "record": record,
+        "days_kept": days_kept
+    }
 
-    return True, {"borrow_fee": borrow_fee, "late_fee": late_fee, "total": total_fee, "record": record}, "Proceed to pay."
+    return True, data, "Proceed to pay."
+
+def confirm_return(record_id, owner_id):
+    record = db.session.get(BorrowRecord, record_id)
+    if not record or record.owner_id != owner_id:
+        return False, "Invalid borrow record."
+        
+    if record.status != 'RETURN_PENDING_CONFIRMATION':
+        return False, "This book is not pending return confirmation."
+        
+    record.status = 'RETURNED'
+    
+    book = db.session.get(Book, record.book_id)
+    if book:
+        book.is_available = True
+        
+    # Notify borrower that return is complete
+    db.session.add(Notification(
+        user_id=record.borrower_id,
+        title="Return Confirmed ✅",
+        message=f"The owner has confirmed receipt and payment for '{book.title if book else 'the book'}'. Thank you!"
+    ))
+        
+    db.session.commit()
+    return True, "Return confirmed and book re-listed."

@@ -12,11 +12,33 @@ def save_cover_image(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    upload_path = os.path.join(current_app.root_path, 'static', 'covers')
-    os.makedirs(upload_path, exist_ok=True)
-    picture_path = os.path.join(upload_path, picture_fn)
     
-    form_picture.save(picture_path)
+    # Store image data in Redis with a 24-hour expiration (86400 seconds)
+    import redis
+    redis_url = current_app.config.get('REDIS_URL', 'redis://localhost:6379/1')
+    
+    image_data = form_picture.read()
+    
+    try:
+        redis_client = redis.from_url(redis_url)
+        redis_key = f"cover_image:{picture_fn}"
+        redis_client.setex(redis_key, 86400, image_data)
+        
+        # Dispatch Celery task to persist image to disk
+        from tasks.image_tasks import persist_cover_image
+        persist_cover_image.delay(picture_fn)
+    except Exception as e:
+        print(f"WARNING: Redis/Celery not available ({e}). Falling back to synchronous disk save.")
+        upload_path = os.path.join(current_app.root_path, 'static', 'covers')
+        os.makedirs(upload_path, exist_ok=True)
+        picture_path = os.path.join(upload_path, picture_fn)
+        
+        with open(picture_path, 'wb') as f:
+            f.write(image_data)
+            
+    # Reset file pointer just in case it's used again
+    form_picture.seek(0)
+    
     return picture_fn
 
 def create_book(user_id, form_data, cover_image_file):

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="page-title text-white mb-4">Incoming Borrow Requests & Returns</h2>
+
+{% set active_returns = [] %}
+{% for record in active if record.status == 'RETURN_PENDING_CONFIRMATION' %}
+    {% set _ = active_returns.append(record) %}
+{% endfor %}
+
+{% set truly_active = [] %}
+{% for record in active if record.status == 'ACTIVE' %}
+    {% set _ = truly_active.append(record) %}
+{% endfor %}
+
+
+<ul class="nav nav-tabs mb-4" id="borrowTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active bg-dark border-secondary text-info fw-bold" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests-tab-pane" type="button" role="tab" aria-controls="requests-tab-pane" aria-selected="true">
+        New Requests 
+        {% if requested %}<span class="badge bg-danger ms-2">{{ requested|length }}</span>{% endif %}
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link bg-dark border-secondary text-warning fw-bold" id="returns-tab" data-bs-toggle="tab" data-bs-target="#returns-tab-pane" type="button" role="tab" aria-controls="returns-tab-pane" aria-selected="false">
+        Pending Returns
+        {% if active_returns %}<span class="badge bg-warning text-dark ms-2">{{ active_returns|length }}</span>{% endif %}
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link bg-dark border-secondary text-white-50 fw-bold" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-tab-pane" type="button" role="tab" aria-controls="active-tab-pane" aria-selected="false">
+        Active Borrows
+        {% if truly_active %}<span class="badge bg-secondary ms-2">{{ truly_active|length }}</span>{% endif %}
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content" id="borrowTabsContent">
+  
+  <!-- NEW REQUESTS -->
+  <div class="tab-pane fade show active" id="requests-tab-pane" role="tabpanel" aria-labelledby="requests-tab" tabindex="0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for req in requested %}
+        <div class="col">
+            <div class="card h-100 bg-dark border-secondary shadow-lg">
+                <div class="card-body">
+                    <h5 class="card-title text-white fw-bold">{{ req.book.title }}</h5>
+                    <p class="text-white-50 small mb-3">Requested by: {{ req.borrower.full_name or req.borrower.email }}</p>
+                    
+                    <ul class="list-group list-group-flush mb-3 rounded">
+                        <li class="list-group-item bg-transparent text-white-50 px-0 d-flex justify-content-between">
+                            <span>Requested For:</span>
+                            <span class="text-white fw-bold">{{ req.requested_days }} Days</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="d-flex gap-2 mt-auto">
+                        <form action="{{ url_for('borrows.respond', record_id=req.id, action='approve') }}" method="POST" class="flex-grow-1 m-0">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-success w-100 rounded-pill shadow-sm">Accept</button>
+                        </form>
+                        <form action="{{ url_for('borrows.respond', record_id=req.id, action='reject') }}" method="POST" class="flex-grow-1 m-0">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-outline-danger w-100 rounded-pill shadow-sm">Reject</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-white-50">No incoming borrow requests.</h4>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+  
+  <!-- PENDING RETURNS -->
+  <div class="tab-pane fade" id="returns-tab-pane" role="tabpanel" aria-labelledby="returns-tab" tabindex="0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for req in active_returns %}
+        <div class="col">
+            <div class="card h-100 bg-dark border-warning shadow-lg" style="box-shadow: 0 0 15px rgba(255, 193, 7, 0.2) !important;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title text-warning fw-bold mb-0">{{ req.book.title }}</h5>
+                        <i class="bi bi-clock-history text-warning"></i>
+                    </div>
+                    <p class="text-white-50 small mb-3">Borrowed by: {{ req.borrower.full_name or req.borrower.email }}</p>
+                    
+                    <div class="alert alert-warning py-2 small mb-3 border-0 bg-warning bg-opacity-10 text-warning">
+                        Borrower has marked this book as returned and claims payment is complete.
+                    </div>
+                    
+                    <form action="{{ url_for('borrows.confirm_return_route', record_id=req.id) }}" method="POST" class="mt-auto">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-warning w-100 rounded-pill shadow-sm fw-bold border-0 text-dark">
+                            Confirm Receipt & Re-list
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-white-50">No returns pending your confirmation.</h4>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+  <!-- ACTIVE BORROWS -->
+  <div class="tab-pane fade" id="active-tab-pane" role="tabpanel" aria-labelledby="active-tab" tabindex="0">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for req in truly_active %}
+        <div class="col">
+            <div class="card h-100 bg-dark border-secondary shadow-lg">
+                <div class="card-body">
+                    <h5 class="card-title text-white fw-bold">{{ req.book.title }}</h5>
+                    <p class="text-white-50 small mb-2">Borrowed by: {{ req.borrower.full_name or req.borrower.email }}</p>
+                    
+                    <div class="small mt-3 pt-3 border-top border-secondary text-white-50">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Started:</span>
+                            <span class="text-white">{{ req.start_date.strftime('%b %d, %Y') if req.start_date else 'N/A' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Due Date:</span>
+                            <span class="text-info">{{ req.due_date.strftime('%b %d, %Y') if req.due_date else 'N/A' }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-3">
+                    <div class="small text-center text-muted">Awaiting return...</div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <h4 class="text-white-50">No books are currently borrowed.</h4>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

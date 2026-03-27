@@ -99,6 +99,11 @@ class BorrowRecord(db.Model):
     returned_date = db.Column(db.DateTime, nullable=True)
     
     late_fee_accrued = db.Column(db.Float, default=0.0)
+    
+    # Relationships
+    book = db.relationship('Book', backref='borrow_records')
+    borrower = db.relationship('User', foreign_keys=[borrower_id], backref='borrowed_records')
+    owner = db.relationship('User', foreign_keys=[owner_id])
 
 class Proposal(db.Model):
     __tablename__ = 'proposals'

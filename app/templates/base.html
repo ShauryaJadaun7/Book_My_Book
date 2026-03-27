@@ -25,7 +25,7 @@
                     {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.index') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.upload') }}">Upload Book</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart.view_cart') }}">🛒 Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart.view_cart') }}">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.my_books') }}">My Books</a></li>
                     {# Notifications link with unread badge #}
                     {% set unread_notifs = current_user.notifications | selectattr('is_read', 'equalto', False) | list |
@@ -49,8 +49,11 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow">
                             <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('transactions.history') }}">Transactions</a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('transactions.history') }}">Purchase History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-info" href="{{ url_for('borrows.my_borrows') }}">My Borrowed Books</a></li>
+                            <li><a class="dropdown-item text-warning" href="{{ url_for('borrows.incoming') }}">Incoming Requests & Returns</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             {# Seller Pending UPI link #}
                             {% set pending_upi = current_user.sales | selectattr('status', 'equalto',
                             'AWAITING_SELLER_CONFIRMATION') | list | length %}

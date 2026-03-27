@@ -8,8 +8,38 @@ from ..models import Book
 @books.route('/')
 def index():
     exclude_id = current_user.id if current_user.is_authenticated else None
-    all_books = get_available_books(exclude_user_id=exclude_id)
+    all_books = get_available_books(exclude_id)
     return render_template('books/index.html', books=all_books)
+
+@books.route('/covers/<filename>')
+def serve_cover(filename):
+    import redis
+    import os
+    from flask import current_app, send_from_directory, Response
+    
+    redis_url = current_app.config.get('REDIS_URL', 'redis://localhost:6379/1')
+    try:
+        redis_client = redis.from_url(redis_url)
+        redis_key = f"cover_image:{filename}"
+        image_data = redis_client.get(redis_key)
+        
+        if image_data:
+            mimetype = 'image/jpeg'
+            if filename.lower().endswith('.png'):
+                mimetype = 'image/png'
+            elif filename.lower().endswith('.gif'):
+                mimetype = 'image/gif'
+            elif filename.lower().endswith('.webp'):
+                mimetype = 'image/webp'
+                
+            return Response(image_data, mimetype=mimetype)
+    except Exception as e:
+        print(f"Redis serve_cover error: {e}")
+        
+    # Fallback to filesystem
+    upload_path = os.path.join(current_app.root_path, 'static', 'covers')
+    return send_from_directory(upload_path, filename)
+
 
 @books.route('/upload', methods=['GET', 'POST'])
 @login_required

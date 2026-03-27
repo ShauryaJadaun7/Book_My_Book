@@ -9,7 +9,7 @@ def make_celery(app_name=__name__):
         app_name,
         backend=result_backend,
         broker=broker_url,
-        include=['tasks.borrow_tasks', 'tasks.notification_tasks']
+        include=['tasks.borrow_tasks', 'tasks.notification_tasks', 'tasks.image_tasks']
     )
 
 celery = make_celery()
