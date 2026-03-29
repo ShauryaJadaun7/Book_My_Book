@@ -1,0 +1,5 @@
+# Treat all HTML files as documentation (won't count in stats)
+*.html linguist-documentation
+
+# Alternatively, just ignore a specific folder (like templates)
+templates/* linguist-vendored
