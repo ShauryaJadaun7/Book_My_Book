@@ -34,5 +34,18 @@ def add(book_id):
 @login_required
 def remove(book_id):
     remove_from_cart(current_user.id, book_id)
+    
+    if request.headers.get('HX-Request'):
+        import json
+        from flask import make_response
+        items = get_cart_items(current_user.id)
+        new_total = sum(item.book.price for item in items if item.book.price)
+        response = make_response("", 200)
+        response.headers['HX-Trigger'] = json.dumps({
+            "cartUpdated": {"value": "Item removed from cart.", "type": "warning"},
+            "cartTotalUpdated": {"total": float(new_total), "count": len(items)}
+        })
+        return response
+
     flash("Item removed from cart.", "info")
     return redirect(url_for('cart.view_cart'))

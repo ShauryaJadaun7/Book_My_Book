@@ -11,6 +11,22 @@ def index():
     all_books = get_available_books(exclude_id)
     return render_template('books/index.html', books=all_books)
 
+@books.route('/search')
+def search():
+    exclude_id = current_user.id if current_user.is_authenticated else None
+    q = request.args.get('q', '').strip()
+    
+    from ..extensions import db
+    query = Book.query.filter_by(is_available=True)
+    if exclude_id:
+        query = query.filter(Book.owner_id != exclude_id)
+        
+    if q:
+        query = query.filter(db.or_(Book.title.ilike(f'%{q}%'), Book.author.ilike(f'%{q}%')))
+        
+    books = query.order_by(Book.created_at.desc()).all()
+    return render_template('books/partials/book_grid.html', books=books)
+
 @books.route('/covers/<filename>')
 def serve_cover(filename):
     import redis
