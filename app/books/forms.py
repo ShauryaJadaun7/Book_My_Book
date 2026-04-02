@@ -21,9 +21,6 @@ class UploadBookForm(FlaskForm):
     is_for_barter = BooleanField('Available for Barter')
     barter_preferences = TextAreaField('Barter Preferences (e.g. specific book title, or genre)', validators=[Optional()])
 
-    # UPI ID — required for sale / borrow so buyers can pay directly
-    upi_id = StringField('Your UPI ID (e.g. name@upi)', validators=[Optional()])
-
     submit = SubmitField('Upload Book')
     
     def validate(self, extra_validators=None):
@@ -41,11 +38,6 @@ class UploadBookForm(FlaskForm):
 
         if self.is_for_borrow.data and not self.borrow_fee_per_day.data:
             self.borrow_fee_per_day.errors.append('Borrow fee rate is required.')
-            return False
-
-        # UPI ID is required whenever money changes hands
-        if (self.is_for_sale.data or self.is_for_borrow.data) and not self.upi_id.data:
-            self.upi_id.errors.append('UPI ID is required so buyers can pay you directly.')
             return False
 
         return True

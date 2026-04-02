@@ -3,115 +3,65 @@
     <div class="card h-100 book-card position-relative shadow border-0 overflow-hidden">
 
         <!-- Cover image with hover actions -->
-        <div class="book-cover-wrapper">
+        <div class="book-cover-wrapper position-relative">
             {% if book.cover_image %}
-            <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover"
+            <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover border-bottom border-dark"
                 alt="{{ book.title }}">
             {% else %}
             <div
-                class="book-cover d-flex align-items-center justify-content-center bg-dark text-muted border-bottom border-secondary">
-                <i class="bi bi-book fs-1"></i>
-                <span class="ms-2">No Cover</span>
+                class="book-cover d-flex align-items-center justify-content-center bg-dark text-muted border-bottom border-dark">
+                <i class="bi bi-book fs-1 opacity-50"></i>
             </div>
             {% endif %}
-
-            <!-- Hover Quick Actions -->
-            <div class="quick-actions rounded-top shadow-lg">
+            
+            <!-- Float Badges on Image (OLX style optional, or just keep them clean below) -->
+            <div class="position-absolute bottom-0 start-0 w-100 p-2 d-flex flex-wrap gap-1" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                 {% if book.is_for_sale %}
-                <!-- HTMX POST to Cart. We prevent redirect by handling the click if we want, or adjust backend -->
-                <form method="POST" action="{{ url_for('cart.add', book_id=book.id) }}" class="m-0 p-0"
-                    hx-post="{{ url_for('cart.add', book_id=book.id) }}" hx-swap="none">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" class="btn btn-sm btn-success rounded-circle" title="Add to Cart">
-                        🛒
-                    </button>
-                </form>
+                <span class="badge bg-success shadow-sm fs-6 px-3 py-2 border border-dark rounded-3">₹{{ book.price|round(2) }}</span>
                 {% endif %}
-
                 {% if book.is_for_borrow %}
-                <button class="btn btn-sm btn-info rounded-circle text-white" title="Request Borrow"
-                    data-bs-toggle="modal" data-bs-target="#borrowModal{{ book.id }}">
-                    📅
-                </button>
+                <span class="badge bg-info shadow-sm text-dark fs-7 px-2 py-1 rounded-3">Borrow</span>
                 {% endif %}
-
                 {% if book.is_for_barter %}
-                <a href="{{ url_for('books.detail', book_id=book.id) }}"
-                    class="btn btn-sm btn-warning rounded-circle" title="Propose Barter">
-                    🔄
-                </a>
+                <span class="badge bg-warning shadow-sm text-dark fs-7 px-2 py-1 rounded-3">Barter</span>
                 {% endif %}
             </div>
         </div>
 
-        <div class="card-body d-flex flex-column">
+        <div class="card-body d-flex flex-column pt-3 pb-2 bg-dark">
             <a href="{{ url_for('books.detail', book_id=book.id) }}"
                 class="text-decoration-none text-light stretched-link">
                 <h5 class="card-title fw-bold mb-1 text-truncate" title="{{ book.title }}">{{ book.title }}</h5>
             </a>
-            <h6 class="card-subtitle mb-3 text-white-50 small">{{ book.author }}</h6>
-
-            <div class="mt-auto d-flex flex-wrap gap-2">
-                {% if book.is_for_sale %}
-                <span class="badge badge-buy rounded-pill fs-7 px-3 py-2">₹{{ book.price|round(2) }}</span>
-                {% endif %}
-                {% if book.is_for_borrow %}
-                <span class="badge badge-borrow rounded-pill fs-7 px-3 py-2">Borrow</span>
-                {% endif %}
-                {% if book.is_for_barter %}
-                <span class="badge badge-barter rounded-pill fs-7 px-3 py-2">Barter</span>
-                {% endif %}
+            <h6 class="card-subtitle mb-2 text-white-50 small text-truncate" title="{{ book.author }}">{{ book.author or 'Unknown Author' }}</h6>
+            <div class="mt-auto pt-2 small text-muted d-flex align-items-center">
+                <i class="bi bi-person me-1"></i> {{ book.owner.full_name or book.owner.email.split('@')[0] }}
             </div>
         </div>
 
-        <div
-            class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex justify-content-between align-items-center">
-            <div class="small text-muted">
-                <span class="text-warning">★</span>
-                {{ "%.1f"|format(book.owner.average_rating) if book.owner.average_rating else "New" }}
-            </div>
-            <!-- Optional owner name or initials -->
-            <div class="small text-muted text-truncate ms-3" style="max-width: 100px;">
-                {{ book.owner.full_name or book.owner.email.split('@')[0] }}
-            </div>
-        </div>
-    </div>
-</div>
+        <div class="card-footer bg-dark border-top border-secondary p-2 z-3 position-relative d-flex flex-column gap-2" style="z-index: 5;">
+            <!-- Phone Button -->
+            {% if book.owner.phone %}
+            <a href="tel:{{ book.owner.phone }}" class="btn btn-sm btn-outline-success w-100 d-flex justify-content-between align-items-center fw-bold" title="Call Seller">
+                <span><i class="bi bi-telephone-fill me-2"></i> Call</span>
+                <span>{{ book.owner.phone }}</span>
+            </a>
+            {% else %}
+            <button class="btn btn-sm btn-outline-secondary w-100 d-flex justify-content-between align-items-center" disabled>
+                <span><i class="bi bi-telephone-fill me-2"></i> Call</span>
+                <span>Unavailable</span>
+            </button>
+            {% endif %}
 
-<!-- Borrow Modal for this book -->
-{% if book.is_for_borrow %}
-<div class="modal fade" id="borrowModal{{ book.id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark text-white" style="border: 1px solid var(--bmb-accent-purple);">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title">Borrow: {{ book.title }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <form action="{{ url_for('borrows.request_borrow', book_id=book.id) }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="modal-body">
-                    <p class="text-white-50 small mb-4">
-                        The owner charges <strong>₹{{ book.borrow_fee_per_day|round(2) }}/day</strong> for this
-                        book.
-                    </p>
-                    <div class="mb-3">
-                        <label class="form-label text-uppercase small fw-bold text-info">How many days?</label>
-                        <input type="number"
-                            class="form-control form-control-lg bg-dark text-white border-secondary"
-                            name="requested_days" min="1" max="30" value="7" required>
-                        <div class="form-text text-muted mt-2">Maximum limit is usually 30 days.</div>
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit Request</button>
-                </div>
-            </form>
+            <!-- Email Button -->
+            <a href="mailto:{{ book.owner.email }}" class="btn btn-sm btn-outline-info w-100 d-flex justify-content-between align-items-center fw-bold" title="Email Seller">
+                <span><i class="bi bi-envelope-fill me-2"></i> Mail</span>
+                <span class="text-truncate" style="max-width: 65%;">{{ book.owner.email }}</span>
+            </a>
         </div>
     </div>
 </div>
-{% endif %}
+
 
 {% else %}
 <div class="col-12 text-center py-5 w-100">

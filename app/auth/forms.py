@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationE
 import os
 
 def college_email_check(form, field):
-    domain_restriction = os.environ.get('COLLEGE_DOMAIN_RESTRICTION')
+    domain_restriction = os.environ.get('COLLEGE_DOMAIN_RESTRICTION', '@adaniuni.ac.in')
     if domain_restriction and not field.data.lower().endswith(domain_restriction):
         raise ValidationError(f'Email must belong to {domain_restriction}')
 
@@ -18,10 +18,7 @@ class OTPForm(FlaskForm):
     otp = StringField('6-Digit OTP', validators=[DataRequired(), Length(min=6, max=6)])
     submit = SubmitField('Verify')
 
-class SetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Complete Registration')
+
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -39,6 +36,3 @@ class ChangePasswordForm(FlaskForm):
     confirm = PasswordField('Confirm New', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
 
-class SellerOnboardForm(FlaskForm):
-    upi_id = StringField('UPI ID (VPA)', validators=[DataRequired(), Length(min=5, max=100)])
-    submit = SubmitField('Save UPI ID')

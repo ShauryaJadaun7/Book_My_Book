@@ -25,23 +25,7 @@
                     {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.index') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.upload') }}">Upload Book</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cart.view_cart') }}">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('books.my_books') }}">My Books</a></li>
-                    {# Notifications link with unread badge #}
-                    {% set unread_notifs = current_user.notifications | selectattr('is_read', 'equalto', False) | list |
-                    length %}
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="{{ url_for('notifications.index') }}">
-                            Notifications
-                            {% if unread_notifs %}
-                            <span
-                                class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger"
-                                style="font-size:0.65rem;">
-                                {{ unread_notifs }}
-                            </span>
-                            {% endif %}
-                        </a>
-                    </li>
                     <li class="nav-item dropdown ms-lg-2">
                         <a class="nav-link dropdown-toggle" href="#" id="userDrop" role="button"
                             data-bs-toggle="dropdown">
@@ -49,23 +33,6 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow">
                             <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('transactions.history') }}">Purchase History</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-info" href="{{ url_for('borrows.my_borrows') }}">My Borrowed Books</a></li>
-                            <li><a class="dropdown-item text-warning" href="{{ url_for('borrows.incoming') }}">Incoming Requests & Returns</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            {# Seller Pending UPI link #}
-                            {% set pending_upi = current_user.sales | selectattr('status', 'equalto',
-                            'AWAITING_SELLER_CONFIRMATION') | list | length %}
-                            {% if pending_upi %}
-                            <li>
-                                <a class="dropdown-item d-flex justify-content-between align-items-center"
-                                    href="{{ url_for('payments.upi_pending') }}">
-                                    Pending Payments
-                                    <span class="badge bg-warning text-dark rounded-pill">{{ pending_upi }}</span>
-                                </a>
-                            </li>
-                            {% endif %}
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link text-danger ms-lg-2"

@@ -17,14 +17,7 @@ def create_app(config_name='default'):
     blueprints = [
         ('core', 'core', None),
         ('auth', 'auth', '/auth'),
-        ('books', 'books', '/books'),
-        ('cart', 'cart', '/cart'),
-        ('payments', 'payments', '/payments'),
-        ('transactions', 'transactions', '/transactions'),
-        ('proposals', 'proposals', '/proposals'),
-        ('notifications', 'notifications', '/notifications'),
-        ('ratings', 'ratings', '/ratings'),
-        ('borrows', 'borrows', '/borrows')
+        ('books', 'books', '/books')
     ]
     
     import importlib

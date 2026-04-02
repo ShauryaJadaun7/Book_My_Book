@@ -62,20 +62,7 @@ def generate_and_send_otp(email, phone=None):
                 
         store['otp_hash'] = otp_hash
     
-    # 1. Send email
-    msg = Message("Your BookMyBook Registration OTP", recipients=[email])
-    msg.body = f"Your OTP is {otp_code}. It expires in 10 minutes."
-    try:
-        mail.send(msg)
-    except Exception as e:
-        print(f"Failed to send email: {e}")
-        print(f"\n[{datetime.now()}] DUMMY EMAIL SENDER")
-        print(f"To: {email}")
-        print(f"Message: Your BookMyBook OTP is {otp_code}. Do not share this code with anyone.")
-        print("-" * 30 + "\n")
-        # In development, we don't return False here so you can read the OTP from the console.
-        
-    # 2. Send SMS
+    # Send SMS (No longer sending OTP to email)
     if phone:
         account_sid = current_app.config.get('TWILIO_ACCOUNT_SID')
         auth_token = current_app.config.get('TWILIO_AUTH_TOKEN')
@@ -99,7 +86,7 @@ def generate_and_send_otp(email, phone=None):
             print(f"Message: Your BookMyBook OTP is {otp_code}. Do not share this code with anyone.")
             print("-" * 30 + "\n")
         
-    return True, "OTP sent successfully to email and phone (simulated)."
+    return True, "OTP sent successfully to phone."
 
 def verify_otp(email, code):
     redis_client = get_redis_client()
@@ -155,3 +142,19 @@ def update_user_password(user, old_password, new_password):
     user.password_hash = generate_password_hash(new_password)
     db.session.commit()
     return True, "Success"
+
+def generate_random_password(length=10):
+    chars = string.ascii_letters + string.digits + "!@#$%^&*"
+    return ''.join(random.choice(chars) for _ in range(length))
+
+def send_password_email(email, password):
+    msg = Message("Welcome to BookMyBook - Your Login Credentials", recipients=[email])
+    msg.body = f"Hello,\n\nYour account has been successfully verified!\n\nYour system generated password is: {password}\n\nPlease use this password to log in next time. You can change it in your profile settings.\n\nBest,\nThe BookMyBook Team"
+    try:
+        mail.send(msg)
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        print(f"\n[{datetime.now()}] DUMMY EMAIL SENDER")
+        print(f"To: {email}")
+        print(f"Message: Your BookMyBook generated password is {password}. Do not share this code with anyone.")
+        print("-" * 30 + "\n")

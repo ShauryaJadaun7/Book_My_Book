@@ -2,6 +2,7 @@ import os
 import secrets
 from werkzeug.utils import secure_filename
 from flask import current_app
+from datetime import datetime, timedelta, timezone
 from ..extensions import db
 from ..models import Book
 
@@ -46,7 +47,6 @@ def create_book(user_id, form_data, cover_image_file):
     from ..models import User
     
     user = db.session.get(User, user_id)
-    upi_id_to_use = form_data.upi_id.data if hasattr(form_data, 'upi_id') and form_data.upi_id.data else (user.upi_id if user else None)
     
     book = Book(
         title=form_data.title.data,
@@ -59,8 +59,7 @@ def create_book(user_id, form_data, cover_image_file):
         is_for_borrow=form_data.is_for_borrow.data,
         borrow_fee_per_day=form_data.borrow_fee_per_day.data if form_data.is_for_borrow.data else None,
         is_for_barter=form_data.is_for_barter.data,
-        barter_preferences=form_data.barter_preferences.data if form_data.is_for_barter.data else None,
-        upi_id=upi_id_to_use
+        barter_preferences=form_data.barter_preferences.data if form_data.is_for_barter.data else None
     )
     
     db.session.add(book)
@@ -68,7 +67,8 @@ def create_book(user_id, form_data, cover_image_file):
     return book
 
 def get_available_books(exclude_user_id=None):
-    query = Book.query.filter_by(is_available=True)
+    five_days_ago = datetime.now(timezone.utc) - timedelta(days=5)
+    query = Book.query.filter(Book.is_available == True, Book.created_at >= five_days_ago)
     if exclude_user_id:
         query = query.filter(Book.owner_id != exclude_user_id)
     return query.order_by(Book.created_at.desc()).all()

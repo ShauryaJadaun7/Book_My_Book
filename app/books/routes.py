@@ -17,7 +17,10 @@ def search():
     q = request.args.get('q', '').strip()
     
     from ..extensions import db
-    query = Book.query.filter_by(is_available=True)
+    from datetime import datetime, timedelta, timezone
+    
+    five_days_ago = datetime.now(timezone.utc) - timedelta(days=5)
+    query = Book.query.filter(Book.is_available == True, Book.created_at >= five_days_ago)
     if exclude_id:
         query = query.filter(Book.owner_id != exclude_id)
         

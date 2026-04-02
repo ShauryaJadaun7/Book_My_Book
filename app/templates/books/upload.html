@@ -114,17 +114,7 @@
                         {% endfor %}
                     {% endif %}
 
-                    <hr class="border-secondary my-4">
 
-                    <h5 class="text-warning mb-3">Payment Details</h5>
-                    <div class="mb-4">
-                        {{ form.upi_id.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                        {{ form.upi_id(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="yourname@upi") }}
-                        <div class="form-text text-muted">Required if you are selling or offering the book for borrow. Buyers will pay this UPI immediately.</div>
-                        {% for error in form.upi_id.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
 
                     <div class="d-grid mt-5">
                         {{ form.submit(class="btn btn-primary btn-lg rounded-pill shadow") }}

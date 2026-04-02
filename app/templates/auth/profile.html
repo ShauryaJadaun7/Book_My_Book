@@ -54,34 +54,5 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">Seller Account (Get Paid)</h5>
-            </div>
-            <div class="card-body">
-                {% if current_user.upi_id %}
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle-fill"></i> Your UPI ID is configured! You can receive payments directly.
-                    </div>
-                    <p class="text-muted small">Current UPI ID: <strong>{{ current_user.upi_id }}</strong></p>
-                    <hr>
-                    <p class="small text-muted mb-3">Update your UPI ID:</p>
-                {% else %}
-                    <p class="small text-muted mb-3">
-                        Set your UPI ID to receive payments directly when someone buys your books.
-                    </p>
-                {% endif %}
-                <form method="POST" action="{{ url_for('auth.profile') }}">
-                    {{ onboard_form.hidden_tag() }}
-                    <div class="mb-3">
-                        {{ onboard_form.upi_id.label(class="form-label") }}
-                        {{ onboard_form.upi_id(class="form-control", placeholder="your_upi_id@bank") }}
-                    </div>
-                    {{ onboard_form.submit(class="btn btn-success w-100") }}
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}
