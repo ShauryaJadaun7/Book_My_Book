@@ -96,4 +96,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Make showToast accessible globally if needed
     window.showToast = showToast;
+
+    // 5. Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    function applyTheme(theme) {
+        htmlElement.setAttribute('data-bs-theme', theme);
+        localStorage.setItem('bmb-theme', theme);
+        if(themeIcon) {
+            themeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        }
+    }
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('bmb-theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        // Default to dark if no preference
+        applyTheme('dark');
+    }
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+    }
+
+    // 6. Auto-dismiss Flash Messages after 6 seconds
+    const flashAlerts = document.querySelectorAll('.alert');
+    flashAlerts.forEach(alertEl => {
+        setTimeout(() => {
+            if (typeof bootstrap !== 'undefined') {
+                const bsAlert = new bootstrap.Alert(alertEl);
+                bsAlert.close();
+            } else {
+                alertEl.style.transition = 'opacity 0.5s ease';
+                alertEl.style.opacity = '0';
+                setTimeout(() => alertEl.remove(), 500);
+            }
+        }, 6000);
+    });
+
 });

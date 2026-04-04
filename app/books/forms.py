@@ -21,6 +21,8 @@ class UploadBookForm(FlaskForm):
     is_for_barter = BooleanField('Available for Barter')
     barter_preferences = TextAreaField('Barter Preferences (e.g. specific book title, or genre)', validators=[Optional()])
 
+    apply_booster = BooleanField('✨ Boost this book to the top of the feed (₹9) - Optional', default=False)
+
     submit = SubmitField('Upload Book')
     
     def validate(self, extra_validators=None):

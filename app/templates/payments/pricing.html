@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row fade-in-up justify-content-center pt-4">
+    <!-- Header -->
+    <div class="col-12 text-center mb-5">
+        <h1 class="page-title text-uppercase display-5 px-3">Upgrade Your Reach</h1>
+        <p class="text-bmb-muted fs-5">Supercharge your books. Overcome the 3-book monthly limit.</p>
+    </div>
+
+    <!-- Tier 1: Booster -->
+    <div class="col-lg-4 col-md-6 mb-4 delay-100">
+        <div class="card h-100 bmb-surface border-subtle pt-3 animated-hover-card" style="border-radius: 1.5rem;">
+            <div class="card-body d-flex flex-column text-center p-4">
+                <div class="mb-3">
+                    <span class="badge badge-neon-buy fs-6 px-3 py-2 rounded-pill shadow-sm">TIER 1</span>
+                </div>
+                <h2 class="fw-bold mb-3" style="color: var(--bmb-accent-primary);">The Booster</h2>
+                <div class="display-4 fw-bold mb-4">
+                    <span class="fs-4 text-bmb-muted align-top">₹</span><span class="text-white">{{ prices['booster']|int }}</span>
+                </div>
+                <ul class="list-unstyled text-start text-bmb-muted fw-medium mb-5 px-3">
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-chevron-double-up text-success"></i> Instantly pushes a single book to the top of the Home Feed.</li>
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-hourglass-top text-success"></i> Extends the listing lifespan to 7 full days.</li>
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-eye text-success"></i> Great for quick, urgent liquidations.</li>
+                </ul>
+                <div class="mt-auto">
+                    <div class="p-3 border border-info rounded" style="background: rgba(13, 202, 240, 0.05);">
+                        <i class="bi bi-info-circle text-info d-block mb-2 fs-4"></i>
+                        <span class="text-bmb-muted small fw-bold text-uppercase d-block mb-1">How to use</span>
+                        <p class="small text-bmb-muted mb-0">The ₹9 Booster option is available directly inside the <a href="{{ url_for('books.upload') }}" class="text-info text-decoration-none fw-bold hover-lift d-inline-block">Upload Book</a> form.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tier 2: Scholar -->
+    <div class="col-lg-4 col-md-6 mb-4 delay-200">
+        <div class="card h-100 border-subtle animated-hover-card position-relative" style="background: linear-gradient(145deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9)); backdrop-filter: blur(20px); border-radius: 1.5rem; box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);">
+            <!-- Glow Border Effect -->
+            <div class="position-absolute top-0 start-0 w-100 h-100 border border-2 rounded" style="border-color: var(--bmb-accent-secondary) !important; opacity: 0.5; pointer-events: none; border-radius: 1.5rem !important;"></div>
+            
+            <div class="card-body d-flex flex-column text-center p-4">
+                <div class="mb-3">
+                    <span class="badge badge-neon-borrow fs-6 px-3 py-2 rounded-pill shadow-sm">TIER 2</span>
+                </div>
+                <h2 class="fw-bold mb-3" style="background: linear-gradient(90deg, var(--bmb-accent-primary), var(--bmb-accent-secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Scholar Status</h2>
+                <div class="display-4 fw-bold mb-4">
+                    <span class="fs-4 text-bmb-muted align-top">₹</span><span class="text-white">{{ prices['scholar']|int }}</span>
+                </div>
+                <ul class="list-unstyled text-start text-white-50 fw-medium mb-5 px-3">
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-infinity text-info"></i> Permanently upgrades your account.</li>
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-arrow-bar-up text-info"></i> Expands upload limit from 3 books to 5 books per month.</li>
+                    <li class="mb-3 d-flex gap-2"><i class="bi bi-gift text-info"></i> Grants +1 free Booster credit upon purchase.</li>
+                </ul>
+                <div class="mt-auto">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.tier == 'scholar' %}
+                            <button class="btn btn-secondary w-100 rounded-pill py-3 fw-bold" disabled>Already a Scholar</button>
+                        {% else %}
+                            <a href="{{ url_for('payments.checkout', tier='scholar') }}" class="btn btn-primary-gradient w-100 rounded-pill py-3 fw-bold shadow hover-lift">Upgrade Now</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary-gradient w-100 rounded-pill py-3 fw-bold shadow hover-lift">Login to Upgrade</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -8,35 +8,37 @@
             <p class="text-muted">Log in to your BookMyBook account.</p>
         </div>
         
-        <div class="card p-4 shadow-lg border-0" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+        <div class="floating-wrapper">
+            <div class="card p-4 shadow-lg border-subtle bmb-surface fade-in-up delay-100" style="background: var(--bmb-glass-bg); backdrop-filter: blur(10px);">
             <div class="card-body">
                 <form method="POST" action="">
                     {{ form.hidden_tag() }}
                     
                     <div class="mb-4">
-                         {{ form.email.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                         {{ form.email(class="form-control form-control-lg", placeholder="student@college.edu") }}
+                         {{ form.email.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
+                         {{ form.email(class="form-control form-control-lg bmb-input", placeholder="student@college.edu") }}
                          {% for error in form.email.errors %}
                              <div class="text-danger small mt-1">{{ error }}</div>
                          {% endfor %}
                     </div>
                     
                     <div class="mb-4">
-                         {{ form.password.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                         {{ form.password(class="form-control form-control-lg", placeholder="••••••••") }}
+                         {{ form.password.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
+                         {{ form.password(class="form-control form-control-lg bmb-input", placeholder="••••••••") }}
                          {% for error in form.password.errors %}
                              <div class="text-danger small mt-1">{{ error }}</div>
                          {% endfor %}
                     </div>
                     
                     <div class="d-grid mt-5">
-                        {{ form.submit(class="btn btn-primary btn-lg rounded-pill shadow") }}
+                        {{ form.submit(class="btn btn-primary-gradient btn-lg rounded-pill shadow hover-lift") }}
                     </div>
                 </form>
             </div>
             
             <div class="card-footer bg-transparent border-0 text-center mt-3">
-                <p class="text-muted mb-0">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-info text-decoration-none fw-bold">Sign up here</a></p>
+                <p class="text-bmb-muted mb-0">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-bold" style="color: var(--bmb-accent-primary);">Sign up here</a></p>
+            </div>
             </div>
         </div>
     </div>

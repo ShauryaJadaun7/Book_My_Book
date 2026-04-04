@@ -18,8 +18,10 @@ class OTPForm(FlaskForm):
     otp = StringField('6-Digit OTP', validators=[DataRequired(), Length(min=6, max=6)])
     submit = SubmitField('Verify')
 
-
-
+class SetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
+    submit = SubmitField('Set Password & Login')
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])

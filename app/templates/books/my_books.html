@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-end mb-5 border-bottom border-dark pb-3">
+<div class="d-flex justify-content-between align-items-end mb-5 border-bottom border-subtle pb-3 fade-in-up delay-100">
     <div>
         <h2 class="page-title mb-1">My Books</h2>
-        <p class="text-muted mb-0">Books you have listed on BookMyBook.</p>
+        <p class="text-bmb-muted mb-0">Books you have listed on BookMyBook.</p>
     </div>
-    <a href="{{ url_for('books.upload') }}" class="btn btn-outline-primary rounded-pill px-4">
+    <a href="{{ url_for('books.upload') }}" class="btn btn-primary-gradient rounded-pill px-4 shadow hover-lift">
         + Post a New Book
     </a>
 </div>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 pb-5">
     {% for book in books %}
-    <div class="col">
-        <div class="card h-100 book-card position-relative shadow border-0 overflow-hidden">
+    <div class="col fade-in-up delay-100">
+        <div class="card h-100 animated-hover-card position-relative shadow border-subtle overflow-hidden rounded-4 bmb-surface">
 
-            <div class="book-cover-wrapper">
+            <div class="book-cover-wrapper position-relative">
                 {% if book.cover_image %}
-                <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover"
+                <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover border-bottom border-subtle"
                     alt="{{ book.title }}">
                 {% else %}
                 <div
-                    class="book-cover d-flex align-items-center justify-content-center bg-dark text-muted border-bottom border-secondary">
+                    class="book-cover d-flex align-items-center justify-content-center bmb-surface-secondary text-bmb-muted border-bottom border-subtle">
                     <i class="bi bi-book fs-1"></i>
                     <span class="ms-2">No Cover</span>
                 </div>
-                {% endif %}
+                {% endif %} 
 
                 <div class="quick-actions rounded-top shadow-lg justify-content-center">
                     <a href="{{ url_for('books.detail', book_id=book.id) }}"
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="card-body d-flex flex-column">
+            <div class="card-body d-flex flex-column bmb-surface">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <h5 class="card-title fw-bold mb-0 text-truncate" title="{{ book.title }}">{{ book.title }}</h5>
                     {% if not book.is_available %}
@@ -45,24 +45,24 @@
                     <span class="badge bg-success rounded-pill shadow-sm" style="font-size: 0.65rem;">ACTIVE</span>
                     {% endif %}
                 </div>
-                <h6 class="card-subtitle mb-3 text-white-50 small">{{ book.author }}</h6>
+                <h6 class="card-subtitle mb-3 text-bmb-muted small">{{ book.author }}</h6>
 
                 <div class="mt-auto d-flex flex-wrap gap-2">
                     {% if book.is_for_sale %}
-                    <span class="badge badge-buy rounded-pill fs-7 px-3 py-2">₹{{ book.price|round(2) }}</span>
+                    <span class="badge badge-neon-buy rounded-pill fs-7 px-3 py-2">₹{{ book.price|round(2) }}</span>
                     {% endif %}
                     {% if book.is_for_borrow %}
-                    <span class="badge badge-borrow rounded-pill fs-7 px-3 py-2">Borrow</span>
+                    <span class="badge badge-neon-borrow rounded-pill fs-7 px-3 py-2">Borrow</span>
                     {% endif %}
                     {% if book.is_for_barter %}
-                    <span class="badge badge-barter rounded-pill fs-7 px-3 py-2">Barter</span>
+                    <span class="badge badge-neon-barter rounded-pill fs-7 px-3 py-2">Barter</span>
                     {% endif %}
                 </div>
             </div>
 
             <div
-                class="card-footer bg-transparent border-0 pt-0 pb-3 d-flex justify-content-between align-items-center">
-                <div class="small text-muted">
+                class="card-footer bmb-surface border-top border-subtle pt-3 pb-3 d-flex justify-content-between align-items-center">
+                <div class="small text-bmb-muted">
                     Uploaded {{ book.created_at.strftime('%d-%m-%Y') }}
                 </div>
             </div>
@@ -70,11 +70,11 @@
     </div>
 
     {% else %}
-    <div class="col-12 text-center py-5">
-        <div class="display-1 text-muted opacity-25 mb-3">📚</div>
-        <h3 class="text-muted">You haven't listed any books yet.</h3>
-        <p class="text-white-50">Upload a book to start selling, borrowing, or bartering!</p>
-        <a href="{{ url_for('books.upload') }}" class="btn btn-primary rounded-pill mt-3 px-4">Upload Now</a>
+    <div class="col-12 text-center py-5 fade-in-up delay-200">
+        <div class="display-1 text-bmb-muted opacity-25 mb-3">📚</div>
+        <h3 class="text-bmb-muted fw-bold">You haven't listed any books yet.</h3>
+        <p class="text-bmb-muted opacity-75">Upload a book to start selling, borrowing, or bartering!</p>
+        <a href="{{ url_for('books.upload') }}" class="btn btn-primary-gradient rounded-pill mt-3 px-4 shadow hover-lift">Upload Now</a>
     </div>
     {% endfor %}
 </div>

@@ -1,131 +1,343 @@
-/* BookMyBook Custom Dark Theme */
+/* BookMyBook Liquid Glass & Animated Blobs Theme */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-:root {
-    --bmb-bg: #0a0f1c;
-    /* Deep navy */
-    --bmb-accent-teal: #00d4ff;
-    --bmb-accent-purple: #9d4edd;
-    --bmb-surface: #121a2f;
-    --bmb-border: #1e2943;
+/* --- LIGHT MODE VARIABLES --- */
+:root[data-bs-theme="light"] {
+    --bmb-bg: #E2E8F0;
+    /* Soft slate background */
+    --bmb-surface: rgba(255, 255, 255, 0.6);
+    --bmb-surface-secondary: rgba(255, 255, 255, 0.4);
+    --bmb-text: #0F172A;
+    --bmb-text-muted: #475569;
+    --bmb-border: rgba(255, 255, 255, 0.8);
+    --bmb-border-hover: rgba(14, 165, 233, 0.5);
+    
+    --bmb-accent-primary: #0EA5E9;
+    --bmb-accent-secondary: #8B5CF6;
+
+    /* Paste/Light Blobs */
+    --blob-opacity: 0.6;
+    --blob-1-color: #38BDF8; /* Sky */
+    --blob-2-color: #C084FC; /* Purple */
+    --blob-3-color: #F472B6; /* Pink */
+    
+    --bmb-shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    --bmb-shadow-hover: 0 15px 35px 0 rgba(31, 38, 135, 0.1);
+    
+    --bmb-glass-nav: rgba(255, 255, 255, 0.7);
+}
+
+/* --- DARK MODE VARIABLES (Neon Cyberpunk) --- */
+:root[data-bs-theme="dark"] {
+    --bmb-bg: #030712;
+    /* Extreme deep space */
+    --bmb-surface: rgba(15, 23, 42, 0.7);
+    --bmb-surface-secondary: rgba(30, 41, 59, 0.5);
+    --bmb-text: #F8FAFC;
+    --bmb-text-muted: #94A3B8;
+    --bmb-border: rgba(255, 255, 255, 0.05);
+    --bmb-border-hover: rgba(56, 189, 248, 0.5);
+    
+    --bmb-accent-primary: #38BDF8;
+    --bmb-accent-secondary: #C084FC;
+
+    /* Vibrant Neon Blobs */
+    --blob-opacity: 0.4;
+    --blob-1-color: #38BDF8; /* Neon Cyan */
+    --blob-2-color: #A855F7; /* Neon Violet */
+    --blob-3-color: #EC4899; /* Neon Magenta */
+    
+    --bmb-shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --bmb-shadow-hover: 0 15px 35px 0 rgba(56, 189, 248, 0.15);
+    
+    --bmb-glass-nav: rgba(3, 7, 18, 0.6);
+}
+
+html {
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 body {
-    background-color: var(--bmb-bg) !important;
-    color: #e2e8f0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: transparent !important; /* Rely on animated-bg */
+    color: var(--bmb-text) !important;
+    font-family: 'Outfit', -apple-system, system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    min-height: 100vh;
 }
 
-/* Nav & Header */
+/* --- THE BACKGROUND ANIMATION --- */
+.animated-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--bmb-bg);
+    transition: background 0.4s ease;
+}
+
+.blob {
+    position: absolute;
+    filter: blur(100px);
+    border-radius: 50%;
+    opacity: var(--blob-opacity);
+    animation: floatBlob infinite alternate ease-in-out;
+    transition: background 0.5s ease;
+    will-change: transform;
+}
+
+.blob-1 {
+    width: 50vw; height: 50vw;
+    background: var(--blob-1-color);
+    top: -10%; left: -10%;
+    animation-duration: 25s;
+}
+
+.blob-2 {
+    width: 45vw; height: 45vw;
+    background: var(--blob-2-color);
+    bottom: -20%; right: -10%;
+    animation-duration: 30s;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 40vw; height: 40vw;
+    background: var(--blob-3-color);
+    top: 20%; left: 30%;
+    animation-duration: 22s;
+    animation-delay: -10s;
+}
+
+@keyframes floatBlob {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    100% { transform: translate(15vw, 15vh) scale(1.2) rotate(15deg); }
+}
+
+
+/* --- NAVIGATION --- */
 .navbar {
-    background: rgba(10, 15, 28, 0.85) !important;
-    backdrop-filter: blur(10px);
+    background: var(--bmb-glass-nav) !important;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--bmb-border);
+    transition: all 0.3s ease;
 }
 
 .navbar-brand {
     font-weight: 800;
+    font-size: 1.5rem;
     letter-spacing: -0.5px;
-    background: linear-gradient(90deg, var(--bmb-accent-teal), var(--bmb-accent-purple));
+    background: linear-gradient(90deg, var(--bmb-accent-primary), var(--bmb-accent-secondary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
 }
 
-/* Cards & Books */
+/* --- LIQUID GLASS SURFACES --- */
+.bmb-surface {
+    background: var(--bmb-surface) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--bmb-border) !important;
+    color: var(--bmb-text) !important;
+    box-shadow: var(--bmb-shadow-soft);
+}
+
+.bmb-surface-secondary {
+    background: var(--bmb-surface-secondary) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--bmb-border) !important;
+}
+
+/* Base Card overrides since we rely on BMB classes now */
 .card {
-    background-color: var(--bmb-surface) !important;
-    border: 1px solid var(--bmb-border);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: transparent !important; /* Let bmb-surface do the work */
 }
 
-.book-card:hover {
-    transform: translateY(-5px) rotate(1deg);
-    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.15);
-    border-color: var(--bmb-accent-purple);
+/* --- INTERACTIVITY & HOVERS --- */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--bmb-shadow-hover);
+}
+
+.animated-hover-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.animated-hover-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--bmb-shadow-hover);
+    border-color: var(--bmb-border-hover) !important;
 }
 
 .book-cover-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: 4px;
+    background: rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 280px;
+    border-bottom: 1px solid var(--bmb-border);
+}
+
+:root[data-bs-theme="light"] .book-cover-wrapper {
+    background: rgba(255,255,255,0.4);
 }
 
 .book-cover {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.book-card:hover .book-cover {
-    transform: scale(1.05);
-    /* Slight zoom on hover */
+.animated-hover-card:hover .book-cover {
+    transform: scale(1.05) translateY(-5px);
 }
 
-/* Glowing Badges */
-.badge-buy {
-    background: rgba(0, 212, 255, 0.15);
-    color: var(--bmb-accent-teal);
-    border: 1px solid var(--bmb-accent-teal);
+/* --- INPUTS & FORMS (Glassy) --- */
+.bmb-input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--bmb-border) !important;
+    color: var(--bmb-text) !important;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1.2rem;
+    transition: all 0.3s ease;
 }
 
-.badge-borrow {
-    background: rgba(157, 78, 221, 0.15);
-    color: var(--bmb-accent-purple);
-    border: 1px solid var(--bmb-accent-purple);
+:root[data-bs-theme="light"] .bmb-input {
+    background: rgba(255, 255, 255, 0.5) !important;
 }
 
-.badge-barter {
-    background: rgba(255, 159, 28, 0.15);
-    color: #ff9f1c;
-    border: 1px solid #ff9f1c;
+.bmb-input:focus {
+    border-color: var(--bmb-border-hover) !important;
+    background: var(--bmb-surface) !important;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2) !important;
+    outline: none;
+    transform: translateY(-2px);
 }
 
-.quick-actions {
-    position: absolute;
-    bottom: -50px;
-    left: 0;
-    width: 100%;
-    background: rgba(10, 15, 28, 0.9);
-    padding: 10px;
-    transition: bottom 0.3s ease;
-    display: flex;
-    justify-content: space-around;
-}
-
-.book-cover-wrapper:hover .quick-actions {
-    bottom: 0;
-}
-
-/* Inputs & Forms */
-.form-control {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid var(--bmb-border);
-    color: white !important;
-}
-
-.form-control:focus {
-    border-color: var(--bmb-accent-teal);
-    box-shadow: 0 0 0 0.25rem rgba(0, 212, 255, 0.25);
-}
-
-/* Buttons */
-.btn-primary {
-    background: linear-gradient(45deg, var(--bmb-accent-teal), var(--bmb-accent-purple));
+/* --- ENHANCED BUTTONS --- */
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--bmb-accent-primary), var(--bmb-accent-secondary));
     border: none;
-    font-weight: 600;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
 }
 
-.btn-primary:hover {
-    filter: brightness(1.2);
-    box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
+.btn-primary-gradient:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(192, 132, 252, 0.4);
+    color: white;
 }
 
-/* General Layout Tweaks */
+.btn-primary-gradient:active {
+    transform: translateY(1px);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    background: var(--bmb-surface-secondary);
+    border: 1px solid var(--bmb-border);
+    backdrop-filter: blur(10px);
+    font-size: 1.2rem;
+    color: var(--bmb-text);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--bmb-shadow-soft);
+}
+
+.theme-toggle-btn:hover {
+    color: var(--bmb-accent-primary);
+    transform: scale(1.15) rotate(15deg);
+    border-color: var(--bmb-border-hover);
+}
+
+/* --- NEON BADGE TAGS --- */
+.badge-neon-buy {
+    background: linear-gradient(135deg, #10B981, #059669) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.badge-neon-borrow {
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.badge-neon-barter {
+    background: linear-gradient(135deg, #F59E0B, #D97706) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+/* Texts */
+.text-bmb-muted {
+    color: var(--bmb-text-muted) !important;
+}
+
+/* --- ENTRANCE ANIMATIONS --- */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); filter: blur(5px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+
+/* --- FLOATING WRAPPER --- */
+@keyframes floatGentle {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-wrapper {
+    animation: floatGentle 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Page Title Glow */
 .page-title {
     font-weight: 800;
     margin-bottom: 2rem;
     position: relative;
     display: inline-block;
+    text-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
 }
 
 .page-title::after {
@@ -133,40 +345,9 @@ body {
     position: absolute;
     bottom: -8px;
     left: 0;
-    width: 40px;
+    width: 60px;
     height: 4px;
-    background: var(--bmb-accent-teal);
-    border-radius: 2px;
-}
-
-.book-card {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.book-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0, 212, 255, 0.15) !important;
-}
-
-.book-cover {
-    height: 280px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-}
-
-.book-card:hover .book-cover {
-    transform: scale(1.05);
-}
-
-.quick-actions {
-    transition: opacity 0.3s ease;
-}
-
-.book-card:hover .quick-actions {
-    opacity: 1;
-}
-
-.book-cover-placeholder {
-    height: 280px;
-    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+    background: linear-gradient(90deg, var(--bmb-accent-primary), var(--bmb-accent-secondary));
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }

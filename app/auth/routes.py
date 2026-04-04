@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
 from . import auth
-from .forms import RegisterEmailForm, OTPForm, LoginForm, UpdateProfileForm, ChangePasswordForm
+from .forms import RegisterEmailForm, OTPForm, LoginForm, UpdateProfileForm, ChangePasswordForm, SetPasswordForm
 from .services import generate_and_send_otp, verify_otp, create_user_after_password, update_user_password, generate_random_password, send_password_email
 from ..models import User
 from ..extensions import login_manager, db
@@ -45,31 +45,40 @@ def verify_registration_otp():
     if form.validate_on_submit():
         success, msg = verify_otp(session['reg_email'], form.otp.data)
         if success:
-            email = session['reg_email']
-            phone = session.get('reg_phone')
-            name = session.get('reg_name', 'Student')
-            
-            # Generate password and create user
-            password = generate_random_password()
-            success, result = create_user_after_password(email, phone, name, password)
-            
-            if success:
-                session.pop('reg_email', None)
-                session.pop('reg_phone', None)
-                session.pop('reg_name', None)
-                
-                # Send password to email
-                send_password_email(email, password)
-                
-                # Auto-login
-                login_user(result)
-                flash('Phone verified! A temporary password has been sent to your email.', 'success')
-                return redirect(url_for('core.index'))
-            else:
-                flash(result, 'danger')
+            session['otp_verified'] = True
+            flash('Phone verified! Please set your secure password.', 'success')
+            return redirect(url_for('auth.set_password'))
         else:
             flash(msg, 'danger')
     return render_template('auth/otp.html', form=form, email=session.get('reg_email'))
+
+@auth.route('/register/password', methods=['GET', 'POST'])
+def set_password():
+    if not session.get('otp_verified') or 'reg_email' not in session:
+        return redirect(url_for('auth.register'))
+        
+    form = SetPasswordForm()
+    if form.validate_on_submit():
+        email = session['reg_email']
+        phone = session.get('reg_phone')
+        name = session.get('reg_name', 'Student')
+        password = form.password.data
+        
+        success, result = create_user_after_password(email, phone, name, password)
+        if success:
+            session.pop('reg_email', None)
+            session.pop('reg_phone', None)
+            session.pop('reg_name', None)
+            session.pop('otp_verified', None)
+            
+            login_user(result)
+            flash('Account created successfully! Welcome to BookMyBook.', 'success')
+            return redirect(url_for('core.index'))
+        else:
+            flash(result, 'danger')
+            return redirect(url_for('auth.register'))
+            
+    return render_template('auth/set_password.html', form=form)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():

@@ -8,13 +8,15 @@ from ..models import Book
 @books.route('/')
 def index():
     exclude_id = current_user.id if current_user.is_authenticated else None
-    all_books = get_available_books(exclude_id)
-    return render_template('books/index.html', books=all_books)
+    page = request.args.get('page', 1, type=int)
+    pagination = get_available_books(exclude_id, page=page)
+    return render_template('books/index.html', pagination=pagination, books=pagination.items)
 
 @books.route('/search')
 def search():
     exclude_id = current_user.id if current_user.is_authenticated else None
     q = request.args.get('q', '').strip()
+    page = request.args.get('page', 1, type=int)
     
     from ..extensions import db
     from datetime import datetime, timedelta, timezone
@@ -27,8 +29,8 @@ def search():
     if q:
         query = query.filter(db.or_(Book.title.ilike(f'%{q}%'), Book.author.ilike(f'%{q}%')))
         
-    books = query.order_by(Book.created_at.desc()).all()
-    return render_template('books/partials/book_grid.html', books=books)
+    pagination = query.order_by(Book.created_at.desc()).paginate(page=page, per_page=12, error_out=False)
+    return render_template('books/partials/book_grid.html', books=pagination.items, pagination=pagination, q=q)
 
 @books.route('/covers/<filename>')
 def serve_cover(filename):
@@ -63,10 +65,27 @@ def serve_cover(filename):
 @books.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
+    from datetime import datetime, timezone
+    
+    # Check rate limits
+    now = datetime.now(timezone.utc)
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    month_books_count = Book.query.filter(Book.owner_id == current_user.id, Book.created_at >= start_of_month).count()
+    
+    limit = 5 if current_user.tier == 'scholar' else 3
+    if month_books_count >= limit:
+        flash(f'Monthly limit reached! You can only post {limit} books per month on the {current_user.tier.capitalize()} plan.', 'danger')
+        return redirect(url_for('books.my_books')) # Or redirect to pricing/booster page
+
     form = UploadBookForm()
     if form.validate_on_submit():
         # form.cover_image.data gives the uploaded file in Flask-WTF
         book = create_book(current_user.id, form, form.cover_image.data)
+        
+        if form.apply_booster.data:
+            flash('Book uploaded successfully! Complete your payment to boost it to the top.', 'info')
+            return redirect(url_for('payments.checkout', tier='booster', book_id=book.id))
+            
         flash('Book uploaded successfully!', 'success')
         return redirect(url_for('books.detail', book_id=book.id))
     return render_template('books/upload.html', form=form)

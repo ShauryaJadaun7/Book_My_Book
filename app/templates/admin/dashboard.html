@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row fade-in-up">
+    <!-- Header -->
+    <div class="col-12 mb-4">
+        <h1 class="page-title text-uppercase">Admin Governance</h1>
+        <p class="text-bmb-muted">Manual verification pipeline for BookMyBook Monetization.</p>
+    </div>
+
+    <!-- Pricing Configurarion Panel -->
+    <div class="col-lg-4 mb-4">
+        <div class="card bmb-surface border-subtle h-100 shadow-sm">
+            <div class="card-header border-bottom border-subtle bg-transparent">
+                <h5 class="mb-0 text-bmb-muted font-monospace"><i class="bi bi-gear-fill me-2" style="color: var(--bmb-accent-primary);"></i>Pricing Config</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.update_pricing') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-bmb-muted small fw-bold">Booster Price (₹)</label>
+                        <input type="number" step="0.5" name="booster_price" class="form-control bmb-input" value="{{ prices['booster'] }}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-bmb-muted small fw-bold">Scholar Upgrade Price (₹)</label>
+                        <input type="number" step="0.5" name="scholar_price" class="form-control bmb-input" value="{{ prices['scholar'] }}">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-gradient w-100 btn-sm py-2 hover-lift">Save Configuration</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Verification Table -->
+    <div class="col-lg-8 mb-4">
+        <div class="card bmb-surface border-subtle h-100 shadow-sm">
+            <div class="card-header border-bottom border-subtle bg-transparent">
+                <h5 class="mb-0 text-bmb-muted font-monospace"><i class="bi bi-bank me-2" style="color: var(--bmb-accent-secondary);"></i>Pending UPI Referrals</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover mb-0 text-bmb-muted">
+                        <thead class="border-bottom border-subtle" style="background: rgba(255,255,255,0.02);">
+                            <tr>
+                                <th class="py-3 px-4">Date</th>
+                                <th class="py-3 px-4">User</th>
+                                <th class="py-3 px-4">Tier</th>
+                                <th class="py-3 px-4">UTR Number</th>
+                                <th class="py-3 px-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in requests %}
+                            <tr class="align-middle border-bottom border-subtle" style="background: rgba(0,0,0,0.1);">
+                                <td class="px-4 py-3">{{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td class="px-4 py-3 fw-bold">{{ req.user.email }}</td>
+                                <td class="px-4 py-3">
+                                    {% if req.requested_tier == 'booster' %}
+                                        <span class="badge badge-neon-buy rounded-pill fs-7 py-1">BOOSTER</span>
+                                    {% else %}
+                                        <span class="badge badge-neon-borrow rounded-pill fs-7 py-1">SCHOLAR</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3 font-monospace tracking-wide text-white">{{ req.utr }}</td>
+                                <td class="px-4 py-3 d-flex gap-2">
+                                    <form method="POST" action="{{ url_for('admin.approve_payment', pr_id=req.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-success shadow-none"><i class="bi bi-check-lg"></i></button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('admin.reject_payment', pr_id=req.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger shadow-none"><i class="bi bi-x-lg"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 opacity-50">
+                                    <i class="bi bi-check2-circle fs-1 d-block mb-3"></i>
+                                    No pending requests. All caught up!
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Platform Inventory Table -->
+<div class="row mt-4 fade-in-up delay-200">
+    <div class="col-12">
+        <div class="card bmb-surface border-subtle shadow-sm">
+            <div class="card-header border-bottom border-subtle bg-transparent d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-bmb-muted font-monospace"><i class="bi bi-collection-fill me-2" style="color: var(--bmb-accent-primary);"></i>Platform Inventory</h5>
+                <span class="badge bg-secondary rounded-pill">{{ all_books|length }} Books Total</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                    <table class="table table-borderless table-hover mb-0 text-bmb-muted">
+                        <thead class="border-bottom border-subtle position-sticky top-0" style="background: var(--bmb-bg-color); z-index: 1;">
+                            <tr>
+                                <th class="py-3 px-4">Posted Date</th>
+                                <th class="py-3 px-4">Title</th>
+                                <th class="py-3 px-4">Owner</th>
+                                <th class="py-3 px-4 text-center">Status</th>
+                                <th class="py-3 px-4">Tags</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in all_books %}
+                            <tr class="align-middle border-bottom border-subtle" style="background: rgba(0,0,0,0.05);">
+                                <td class="px-4 py-3">{{ book.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td class="px-4 py-3 fw-bold text-white text-truncate" style="max-width: 250px;">{{ book.title }}</td>
+                                <td class="px-4 py-3">{{ book.owner.email }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    {% if book.is_available %}
+                                        <span class="badge bg-success rounded-pill">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary rounded-pill">Unlisted</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3">
+                                    {% if book.is_boosted %}<span class="badge bg-warning text-dark me-1"><i class="bi bi-lightning-fill"></i> Boosted</span>{% endif %}
+                                    {% if book.is_for_sale %}<span class="badge badge-neon-buy me-1">Sale</span>{% endif %}
+                                    {% if book.is_for_borrow %}<span class="badge badge-neon-borrow me-1">Borrow</span>{% endif %}
+                                    {% if book.is_for_barter %}<span class="badge badge-neon-barter">Barter</span>{% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 opacity-50">
+                                    <i class="bi bi-book fs-1 d-block mb-3"></i>
+                                    No books have been listed yet.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

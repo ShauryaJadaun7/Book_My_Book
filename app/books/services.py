@@ -59,19 +59,20 @@ def create_book(user_id, form_data, cover_image_file):
         is_for_borrow=form_data.is_for_borrow.data,
         borrow_fee_per_day=form_data.borrow_fee_per_day.data if form_data.is_for_borrow.data else None,
         is_for_barter=form_data.is_for_barter.data,
-        barter_preferences=form_data.barter_preferences.data if form_data.is_for_barter.data else None
+        barter_preferences=form_data.barter_preferences.data if form_data.is_for_barter.data else None,
+        expires_at=datetime.now(timezone.utc) + timedelta(days=5)
     )
     
     db.session.add(book)
     db.session.commit()
     return book
 
-def get_available_books(exclude_user_id=None):
+def get_available_books(exclude_user_id=None, page=1, per_page=12):
     five_days_ago = datetime.now(timezone.utc) - timedelta(days=5)
     query = Book.query.filter(Book.is_available == True, Book.created_at >= five_days_ago)
     if exclude_user_id:
         query = query.filter(Book.owner_id != exclude_user_id)
-    return query.order_by(Book.created_at.desc()).all()
+    return query.order_by(Book.created_at.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
 def get_book_by_id(book_id):
     return db.session.get(Book, book_id)

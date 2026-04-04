@@ -8,22 +8,22 @@
             <p class="text-muted">Fill out the details below to list your book for sale, borrow, or barter.</p>
         </div>
 
-        <div class="card p-4 shadow-lg border-0" style="background: rgba(18, 26, 47, 0.8); backdrop-filter: blur(10px);">
+        <div class="card p-4 shadow-lg border-subtle bmb-surface fade-in-up delay-100" style="background: var(--bmb-glass-bg); backdrop-filter: blur(10px);">
             <div class="card-body">
                 <form method="POST" action="" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
 
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3 mb-md-0">
-                            {{ form.title.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                            {{ form.title(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="Book Title") }}
+                            {{ form.title.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
+                            {{ form.title(class="form-control form-control-lg bmb-input", placeholder="Book Title") }}
                             {% for error in form.title.errors %}
                                 <div class="text-danger small mt-1">{{ error }}</div>
                             {% endfor %}
                         </div>
                         <div class="col-md-6">
-                            {{ form.author.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                            {{ form.author(class="form-control form-control-lg bg-dark text-white border-secondary", placeholder="Author Name") }}
+                            {{ form.author.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
+                            {{ form.author(class="form-control form-control-lg bmb-input", placeholder="Author Name") }}
                             {% for error in form.author.errors %}
                                 <div class="text-danger small mt-1">{{ error }}</div>
                             {% endfor %}
@@ -31,20 +31,20 @@
                     </div>
 
                     <div class="mb-3">
-                        {{ form.description.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
-                        {{ form.description(class="form-control bg-dark text-white border-secondary", rows="3", placeholder="Condition, edition, or other details...") }}
+                        {{ form.description.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
+                        {{ form.description(class="form-control bmb-input", rows="3", placeholder="Condition, edition, or other details...") }}
                         {% for error in form.description.errors %}
                             <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
                     </div>
 
                     <div class="mb-4">
-                        {{ form.cover_image.label(class="form-label text-white-50 small text-uppercase fw-bold") }}
+                        {{ form.cover_image.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
                         <div class="d-flex align-items-center gap-3">
-                            <img id="cover_preview" src="#" alt="Cover Preview" class="img-thumbnail bg-dark border-secondary d-none" style="max-height: 100px; max-width: 80px; object-fit: cover;">
+                            <img id="cover_preview" src="#" alt="Cover Preview" class="img-thumbnail bmb-surface-secondary border-subtle d-none" style="max-height: 100px; max-width: 80px; object-fit: cover;">
                             <div class="flex-grow-1">
-                                {{ form.cover_image(class="form-control bg-dark text-white border-secondary") }}
-                                <div class="form-text text-muted">Upload a clear photo of the cover (JPG, PNG).</div>
+                                {{ form.cover_image(class="form-control bmb-input") }}
+                                <div class="form-text text-bmb-muted">Upload a clear photo of the cover (JPG, PNG).</div>
                             </div>
                         </div>
                         {% for error in form.cover_image.errors %}
@@ -52,21 +52,21 @@
                         {% endfor %}
                     </div>
 
-                    <hr class="border-secondary my-4">
+                    <hr class="border-subtle my-4">
 
-                    <h5 class="text-info mb-3">Listing Options</h5>
-                    <p class="text-muted small mb-4">Select at least one option to proceed.</p>
+                    <h5 class="mb-3 font-monospace" style="color: var(--bmb-accent-primary);">LISTING OPTIONS</h5>
+                    <p class="text-bmb-muted small mb-4">Select at least one option to proceed.</p>
 
                     <!-- Row 1: Sale Option -->
-                    <div class="row align-items-center mb-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div class="row align-items-center mb-3 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
                         <div class="col-md-5">
                             <div class="form-check form-switch">
                                 {{ form.is_for_sale(class="form-check-input", role="switch", id="flexSwitchSale") }}
-                                {{ form.is_for_sale.label(class="form-check-label fw-bold text-white", for="flexSwitchSale") }}
+                                {{ form.is_for_sale.label(class="form-check-label fw-bold", for="flexSwitchSale") }}
                             </div>
                         </div>
                         <div class="col-md-7 mt-2 mt-md-0" id="price_container" style="display: none;">
-                            {{ form.price(class="form-control bg-dark text-white border-secondary", placeholder="Sale Price (₹)") }}
+                            {{ form.price(class="form-control bmb-input", placeholder="Sale Price (₹)") }}
                             {% for error in form.price.errors %}
                                 <div class="text-danger small mt-1">{{ error }}</div>
                             {% endfor %}
@@ -74,15 +74,15 @@
                     </div>
 
                     <!-- Row 2: Borrow Option -->
-                    <div class="row align-items-center mb-3 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div class="row align-items-center mb-3 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
                         <div class="col-md-5">
                             <div class="form-check form-switch">
                                 {{ form.is_for_borrow(class="form-check-input", role="switch", id="flexSwitchBorrow") }}
-                                {{ form.is_for_borrow.label(class="form-check-label fw-bold text-white", for="flexSwitchBorrow") }}
+                                {{ form.is_for_borrow.label(class="form-check-label fw-bold", for="flexSwitchBorrow") }}
                             </div>
                         </div>
                         <div class="col-md-7 mt-2 mt-md-0" id="borrow_fee_container" style="display: none;">
-                            {{ form.borrow_fee_per_day(class="form-control bg-dark text-white border-secondary", placeholder="Borrow Fee Rate (₹/day)") }}
+                            {{ form.borrow_fee_per_day(class="form-control bmb-input", placeholder="Borrow Fee Rate (₹/day)") }}
                             {% for error in form.borrow_fee_per_day.errors %}
                                 <div class="text-danger small mt-1">{{ error }}</div>
                             {% endfor %}
@@ -90,15 +90,15 @@
                     </div>
 
                     <!-- Row 3: Barter Option -->
-                    <div class="row align-items-center mb-4 p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div class="row align-items-center mb-4 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
                         <div class="col-md-5">
                             <div class="form-check form-switch">
                                 {{ form.is_for_barter(class="form-check-input", role="switch", id="flexSwitchBarter") }}
-                                {{ form.is_for_barter.label(class="form-check-label fw-bold text-white", for="flexSwitchBarter") }}
+                                {{ form.is_for_barter.label(class="form-check-label fw-bold", for="flexSwitchBarter") }}
                             </div>
                         </div>
                         <div class="col-md-7 mt-2 mt-md-0" id="barter_prefs_container" style="display: none;">
-                            {{ form.barter_preferences(class="form-control bg-dark text-white border-secondary", rows="2", placeholder="Preferences (e.g. genre or specific book)") }}
+                            {{ form.barter_preferences(class="form-control bmb-input", rows="2", placeholder="Preferences (e.g. genre or specific book)") }}
                             {% for error in form.barter_preferences.errors %}
                                 <div class="text-danger small mt-1">{{ error }}</div>
                             {% endfor %}
@@ -114,10 +114,23 @@
                         {% endfor %}
                     {% endif %}
 
+                    <!-- Optional Booster Upgrade -->
+                    <div class="row mt-4 mb-4">
+                        <div class="col-12">
+                            <div class="p-3 rounded border border-info" style="background: rgba(13, 202, 240, 0.05);">
+                                <div class="form-check d-flex align-items-center gap-2">
+                                    {{ form.apply_booster(class="form-check-input fs-5 mt-0") }}
+                                    {{ form.apply_booster.label(class="form-check-label fw-bold text-info", style="cursor: pointer;") }}
+                                </div>
+                                <p class="text-bmb-muted small ms-4 ps-2 mb-0 mt-1">If checked, you will be redirected to payment verification to push this book to the top of the feed.</p>
+                            </div>
+                        </div>
+                    </div>
+
 
 
                     <div class="d-grid mt-5">
-                        {{ form.submit(class="btn btn-primary btn-lg rounded-pill shadow") }}
+                        {{ form.submit(class="btn btn-primary-gradient btn-lg rounded-pill shadow hover-lift") }}
                     </div>
                 </form>
             </div>

@@ -17,7 +17,9 @@ def create_app(config_name='default'):
     blueprints = [
         ('core', 'core', None),
         ('auth', 'auth', '/auth'),
-        ('books', 'books', '/books')
+        ('books', 'books', '/books'),
+        ('admin', 'admin_bp', '/admin'),
+        ('payments', 'payments_bp', '/payments')
     ]
     
     import importlib

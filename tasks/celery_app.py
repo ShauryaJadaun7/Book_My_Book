@@ -9,7 +9,7 @@ def make_celery(app_name=__name__):
         app_name,
         backend=result_backend,
         broker=broker_url,
-        include=['tasks.borrow_tasks', 'tasks.notification_tasks', 'tasks.image_tasks']
+        include=['tasks.borrow_tasks', 'tasks.notification_tasks', 'tasks.image_tasks', 'tasks.listing_tasks']
     )
 
 celery = make_celery()
@@ -21,6 +21,10 @@ celery.conf.beat_schedule = {
     'check-overdue-books-every-day': {
         'task': 'tasks.borrow_tasks.check_overdue_books',
         'schedule': crontab(hour=0, minute=0), # Midnight daily
+    },
+    'expire-unlisted-books-every-3-hours': {
+        'task': 'tasks.listing_tasks.expire_old_listings',
+        'schedule': crontab(minute=0, hour='*/3'),
     },
 }
 celery.conf.timezone = 'UTC'
