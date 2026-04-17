@@ -4,137 +4,204 @@
 <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
         <div class="text-center mb-4">
-            <h1 class="page-title">Post a Book</h1>
-            <p class="text-muted">Fill out the details below to list your book for sale, borrow, or barter.</p>
+            <h1 class="page-title fw-bolder" style="font-size: 3rem; color: #111827; letter-spacing: -1px;">Share Your Story</h1>
+            <p class="text-muted fw-bold">Post a new book to the BookMyBook community shelf.</p>
         </div>
 
-        <div class="card p-4 shadow-lg border-subtle bmb-surface fade-in-up delay-100" style="background: var(--bmb-glass-bg); backdrop-filter: blur(10px);">
+        <div class="neo-card p-4 p-md-5 mt-4 mb-5 fade-in-up delay-100">
             <div class="card-body">
                 <form method="POST" action="" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
 
-                    <div class="row mb-3">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            {{ form.title.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                            {{ form.title(class="form-control form-control-lg bmb-input", placeholder="Book Title") }}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            {{ form.title.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                            {{ form.title(class="form-control neo-input w-100", placeholder="e.g. The Midnight Library") }}
                             {% for error in form.title.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
+                                <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
                             {% endfor %}
                         </div>
                         <div class="col-md-6">
-                            {{ form.author.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                            {{ form.author(class="form-control form-control-lg bmb-input", placeholder="Author Name") }}
+                            {{ form.author.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                            {{ form.author(class="form-control neo-input w-100", placeholder="e.g. Matt Haig") }}
                             {% for error in form.author.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
+                                <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.description.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                        {{ form.description(class="form-control bmb-input", rows="3", placeholder="Condition, edition, or other details...") }}
-                        {% for error in form.description.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            {{ form.genre.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                            {{ form.genre(class="form-select neo-input w-100") }}
+                            {% for error in form.genre.errors %}
+                                <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.condition.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                            {{ form.condition(class="form-select neo-input w-100") }}
+                            {% for error in form.condition.errors %}
+                                <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
                     </div>
 
                     <div class="mb-4">
-                        {{ form.cover_image.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                        <div class="d-flex align-items-center gap-3">
-                            <img id="cover_preview" src="#" alt="Cover Preview" class="img-thumbnail bmb-surface-secondary border-subtle d-none" style="max-height: 100px; max-width: 80px; object-fit: cover;">
-                            <div class="flex-grow-1">
-                                {{ form.cover_image(class="form-control bmb-input") }}
-                                <div class="form-text text-bmb-muted">Upload a clear photo of the cover (JPG, PNG).</div>
+                        {{ form.description.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                        {{ form.description(class="form-control neo-input w-100", rows="3", placeholder="Tell us why someone should read this...") }}
+                        {% for error in form.description.errors %}
+                            <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4">
+                         {{ form.handoff_location.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                         {{ form.handoff_location(class="form-control neo-input w-100", placeholder="e.g. Cafeteria, Library Entrance") }}
+                         {% for error in form.handoff_location.errors %}
+                             <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                         {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.cover_image.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                        <div class="d-flex align-items-center gap-3 chunky-border p-4 w-100" style="border-style: dashed !important; background-color: #FDFBF7;">
+                            <img id="cover_preview" src="#" alt="Cover Preview" class="d-none" style="max-height: 100px; max-width: 80px; object-fit: cover; border: 2px solid #111827;">
+                            <div class="flex-grow-1 text-center">
+                                <i class="bi bi-camera-fill fs-3 mb-2" style="color: #4B5563;"></i>
+                                <div class="fw-bold mb-2">Drop the cover here or browse</div>
+                                <div style="font-size: 0.75rem; color: #4B5563; font-weight: bold;">JPG, PNG UP TO 5MB</div>
+                                {{ form.cover_image(class="form-control mt-2", style="border: 2px solid #111827; border-radius: 8px;") }}
                             </div>
                         </div>
                         {% for error in form.cover_image.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
+                            <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
                         {% endfor %}
                     </div>
 
-                    <hr class="border-subtle my-4">
+                    <hr style="border-color: #111827; opacity: 1; border-width: 3px;" class="my-5">
 
-                    <h5 class="mb-3 font-monospace" style="color: var(--bmb-accent-primary);">LISTING OPTIONS</h5>
-                    <p class="text-bmb-muted small mb-4">Select at least one option to proceed.</p>
+                    <h5 class="mb-3 font-monospace fw-bolder" style="color: ##111827; letter-spacing: 1.5px;">LISTING OPTIONS</h5>
+                    <p class="text-muted fw-bold small mb-4">Select at least one option to proceed.</p>
 
                     <!-- Row 1: Sale Option -->
-                    <div class="row align-items-center mb-3 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
+                    <div class="row align-items-center mb-4 p-3 chunky-border" style="background-color: #FFFFFF;">
                         <div class="col-md-5">
-                            <div class="form-check form-switch">
-                                {{ form.is_for_sale(class="form-check-input", role="switch", id="flexSwitchSale") }}
-                                {{ form.is_for_sale.label(class="form-check-label fw-bold", for="flexSwitchSale") }}
+                            <div class="form-check form-switch d-flex align-items-center p-0">
+                                {{ form.is_for_sale(class="form-check-input ms-0 me-3", style="width: 2.5em; height: 1.25em; border: 2px solid #111827;", role="switch", id="flexSwitchSale") }}
+                                {{ form.is_for_sale.label(class="form-check-label fw-bold mb-0", for="flexSwitchSale", style="color: #111827;") }}
                             </div>
                         </div>
-                        <div class="col-md-7 mt-2 mt-md-0" id="price_container" style="display: none;">
-                            {{ form.price(class="form-control bmb-input", placeholder="Sale Price (₹)") }}
+                        <div class="col-md-7 mt-3 mt-md-0" id="price_container" style="display: none;">
+                            {{ form.price(class="form-control neo-input", placeholder="Sale Price (₹)") }}
                             {% for error in form.price.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
+                                <div class="text-danger small mt-2 fw-bold">{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
 
                     <!-- Row 2: Borrow Option -->
-                    <div class="row align-items-center mb-3 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
+                    <div class="row align-items-center mb-4 p-3 chunky-border" style="background-color: #FFFFFF;">
                         <div class="col-md-5">
-                            <div class="form-check form-switch">
-                                {{ form.is_for_borrow(class="form-check-input", role="switch", id="flexSwitchBorrow") }}
-                                {{ form.is_for_borrow.label(class="form-check-label fw-bold", for="flexSwitchBorrow") }}
+                            <div class="form-check form-switch d-flex align-items-center p-0">
+                                {{ form.is_for_borrow(class="form-check-input ms-0 me-3", style="width: 2.5em; height: 1.25em; border: 2px solid #111827;", role="switch", id="flexSwitchBorrow") }}
+                                {{ form.is_for_borrow.label(class="form-check-label fw-bold mb-0", for="flexSwitchBorrow", style="color: #111827;") }}
                             </div>
                         </div>
-                        <div class="col-md-7 mt-2 mt-md-0" id="borrow_fee_container" style="display: none;">
-                            {{ form.borrow_fee_per_day(class="form-control bmb-input", placeholder="Borrow Fee Rate (₹/day)") }}
+                        <div class="col-md-7 mt-3 mt-md-0" id="borrow_fee_container" style="display: none;">
+                            {{ form.borrow_fee_per_day(class="form-control neo-input", placeholder="Borrow Fee Rate (₹/day)") }}
                             {% for error in form.borrow_fee_per_day.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
+                                <div class="text-danger small mt-2 fw-bold">{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
 
                     <!-- Row 3: Barter Option -->
-                    <div class="row align-items-center mb-4 p-3 rounded bmb-surface-secondary border-subtle hover-lift">
+                    <div class="row align-items-center mb-4 p-3 chunky-border" style="background-color: #FFFFFF;">
                         <div class="col-md-5">
-                            <div class="form-check form-switch">
-                                {{ form.is_for_barter(class="form-check-input", role="switch", id="flexSwitchBarter") }}
-                                {{ form.is_for_barter.label(class="form-check-label fw-bold", for="flexSwitchBarter") }}
+                            <div class="form-check form-switch d-flex align-items-center p-0">
+                                {{ form.is_for_barter(class="form-check-input ms-0 me-3", style="width: 2.5em; height: 1.25em; border: 2px solid #111827;", role="switch", id="flexSwitchBarter") }}
+                                {{ form.is_for_barter.label(class="form-check-label fw-bold mb-0", for="flexSwitchBarter", style="color: #111827;") }}
                             </div>
                         </div>
-                        <div class="col-md-7 mt-2 mt-md-0" id="barter_prefs_container" style="display: none;">
-                            {{ form.barter_preferences(class="form-control bmb-input", rows="2", placeholder="Preferences (e.g. genre or specific book)") }}
+                        <div class="col-md-7 mt-3 mt-md-0" id="barter_prefs_container" style="display: none;">
+                            {{ form.barter_preferences(class="form-control neo-input", rows="2", placeholder="Preferences (e.g. genre or specific book)") }}
                             {% for error in form.barter_preferences.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
+                                <div class="text-danger small mt-2 fw-bold">{{ error }}</div>
                             {% endfor %}
                         </div>
                     </div>
 
-                    <!-- General errors like 'Select at least one option' -->
+                    <!-- General errors -->
                     {% if form.is_for_sale.errors %}
                         {% for error in form.is_for_sale.errors %}
                             {% if 'Select at least one option' in error %}
-                                <div class="alert alert-danger py-2">{{ error }}</div>
+                                <div class="neo-card neo-card-yellow mb-4 p-3 text-center fw-bold">{{ error }}</div>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
 
                     <!-- Optional Booster Upgrade -->
-                    <div class="row mt-4 mb-4">
-                        <div class="col-12">
-                            <div class="p-3 rounded border border-info" style="background: rgba(13, 202, 240, 0.05);">
-                                <div class="form-check d-flex align-items-center gap-2">
-                                    {{ form.apply_booster(class="form-check-input fs-5 mt-0") }}
-                                    {{ form.apply_booster.label(class="form-check-label fw-bold text-info", style="cursor: pointer;") }}
-                                </div>
-                                <p class="text-bmb-muted small ms-4 ps-2 mb-0 mt-1">If checked, you will be redirected to payment verification to push this book to the top of the feed.</p>
+                    <div class="neo-card neo-card-yellow my-5 p-4 hard-shadow">
+                        <div class="form-check d-flex align-items-center gap-3 p-0">
+                            {{ form.apply_booster(class="form-check-input ms-0", style="width: 2em; height: 2em; border: 3px solid #111827;", id="boosterCheck") }}
+                            <div class="flex-grow-1">
+                                <label class="form-check-label fw-bolder fs-5 text-dark" for="boosterCheck" style="cursor: pointer;">
+                                    Boost this book to the top of the feed <span class="badge bg-dark rounded-pill ms-2 fs-6">₹8</span>
+                                </label>
+                                <p class="text-dark fw-bold small mb-0 mt-1">Stand out in the community shelf</p>
                             </div>
                         </div>
                     </div>
 
-
-
                     <div class="d-grid mt-5">
-                        {{ form.submit(class="btn btn-primary-gradient btn-lg rounded-pill shadow hover-lift") }}
+                        {{ form.submit(class="neo-btn neo-btn-primary w-100 fs-4 pb-3 pt-3", value="Upload Book") }}
                     </div>
                 </form>
             </div>
         </div>
+        
+        <div class="neo-card p-4 text-center mb-5" style="background-color: #FDFBF7;">
+            <p class="fw-bolder mb-1" style="color: #111827; letter-spacing: 1px;">COMMUNITY TIP</p>
+            <p class="fw-bold mb-0" style="color: #E11D48;">Books with bright, clear covers sell 4x faster on BookMyBook. Use natural lighting!</p>
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const saleSwitch = document.getElementById('flexSwitchSale');
+        const borrowSwitch = document.getElementById('flexSwitchBorrow');
+        const barterSwitch = document.getElementById('flexSwitchBarter');
+
+        const priceContainer = document.getElementById('price_container');
+        const borrowFeeContainer = document.getElementById('borrow_fee_container');
+        const barterPrefsContainer = document.getElementById('barter_prefs_container');
+
+        function toggleVisibility(checkbox, container) {
+            if (checkbox && container) {
+                if (checkbox.checked) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        }
+
+        if (saleSwitch) {
+            toggleVisibility(saleSwitch, priceContainer);
+            saleSwitch.addEventListener('change', () => toggleVisibility(saleSwitch, priceContainer));
+        }
+
+        if (borrowSwitch) {
+            toggleVisibility(borrowSwitch, borrowFeeContainer);
+            borrowSwitch.addEventListener('change', () => toggleVisibility(borrowSwitch, borrowFeeContainer));
+        }
+        
+        if (barterSwitch) {
+            toggleVisibility(barterSwitch, barterPrefsContainer);
+            barterSwitch.addEventListener('change', () => toggleVisibility(barterSwitch, barterPrefsContainer));
+        }
+    });
+</script>
 {% endblock %}

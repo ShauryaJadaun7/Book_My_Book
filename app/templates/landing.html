@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="container text-center" style="margin-top: 80px; margin-bottom: 80px;">
+    <h1 class="fw-bolder" style="font-size: 3.5rem; letter-spacing: -2px; color: #111827; line-height: 1.1;">
+        Discover, Share,<br>and <span class="wavy-underline">Immerse.</span>
+    </h1>
+    
+    <p class="mx-auto mt-4 mb-5 text-muted fw-medium" style="max-width: 500px; font-size: 1.1rem; color: #4B5563 !important;">
+        Join the curated college of digital literature. A place where stories aren't just read , they are experienced through a tactile, vibrant lens.
+    </p>
+    
+    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+        <a href="{{ url_for('auth.register') }}" class="neo-btn neo-btn-primary fs-5" style="width: 240px;">Join Now</a>
+        <a href="{{ url_for('auth.login') }}" class="neo-btn neo-btn-white fs-5" style="width: 240px;">Explore</a>
+    </div>
+</section>
+
+<!-- Why Choose BookMyBook -->
+<section class="container" style="margin-bottom: 100px;">
+    <div class="text-center mb-5">
+        <span class="badge rounded-pill px-3 py-2 text-dark fw-bold border border-dark mb-3 shadow-sm" style="background-color: #FBBF24; font-size: 0.8rem; border-width: 2px !important;">CAPABILITY INFO</span>
+        <h2 class="fw-bolder" style="font-size: 2.5rem; color: #111827; letter-spacing: -1px;">Why Choose<br>BookMyBook?</h2>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="neo-card p-4 h-100 fade-in-up">
+                <div class="neo-icon-box mb-4 text-primary" style="background-color: #FDFBF7;">
+                    <i class="bi bi-collection"></i>
+                </div>
+                <h4 class="fw-bold mb-3" style="color: #111827;">Infinite Collection</h4>
+                <p class="fw-medium mb-0" style="color: #4B5563; font-size: 0.95rem;">Access millions of titles across every genre imaginable. From vintage classics to modern indie zines.</p>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="neo-card neo-card-yellow p-4 h-100 fade-in-up delay-100">
+                <div class="neo-icon-box mb-4 text-dark" style="background-color: #FFFFFF;">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3" style="color: #111827;">Lightning Fast</h4>
+                <p class="fw-medium mb-0" style="color: #111827; font-size: 0.95rem;">No lag, no loading bars. Our engine is optimized for the most immersive reading experience possible.</p>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="neo-card p-4 h-100 fade-in-up delay-200">
+                <div class="neo-icon-box mb-4" style="background-color: #FDFBF7; color: #E11D48;">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3" style="color: #111827;">Enterprise Security</h4>
+                <p class="fw-medium mb-0" style="color: #4B5563; font-size: 0.95rem;">Your data and reading habits are protected with industry-leading encryption and privacy protocols.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Highlights Grid -->
+<section class="container" style="margin-bottom: 100px;">
+    <div class="row g-4 justify-content-center">
+        <!-- Book of the Month -->
+        <div class="col-md-6 col-lg-5">
+            <div class="neo-card neo-card-purple p-4 p-md-5 h-100 d-flex flex-column justify-content-center position-relative overflow-hidden">
+                <div class="position-relative z-index-1">
+                    <h3 class="fw-bolder mb-2" style="font-size: 2rem;">Book of the<br>Month</h3>
+                    <p class="fw-medium opacity-75 mb-4 fst-italic">"The Geometry of Quiet" by Maxence</p>
+                    <a href="{{ url_for('auth.register') }}" class="neo-btn neo-btn-white btn-sm py-2 px-4 shadow-none">Read Now</a>
+                </div>
+                <!-- Abstract lines bg -->
+                <i class="bi bi-book position-absolute opacity-25" style="right: -20px; bottom: -20px; font-size: 15rem; transform: rotate(-15deg);"></i>
+            </div>
+        </div>
+        
+        <!-- Other Stats -->
+        <div class="col-md-6 col-lg-4 d-flex flex-column gap-4">
+            <!-- Community Picks -->
+            <div class="neo-card p-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="fw-bold mb-1" style="color: #111827;">Community Picks</h5>
+                    <p class="fw-medium mb-0" style="color: #4B5563; font-size: 0.85rem;">Voted by 12k readers this week.</p>
+                </div>
+                <h3 class="mb-0" style="color: #E11D48;"><i class="bi bi-people-fill"></i></h3>
+            </div>
+            
+            <!-- Top Rated -->
+            <div class="neo-card neo-card-yellow p-4 text-center">
+                <h3 class="mb-2" style="color: #111827;"><i class="bi bi-star-fill"></i></h3>
+                <h5 class="fw-bold mb-0" style="color: #111827;">Top Rated</h5>
+            </div>
+            
+            <!-- Trending -->
+            <div class="neo-card p-4 text-center">
+                <h3 class="mb-2" style="color: #111827;"><i class="bi bi-graph-up-arrow"></i></h3>
+                <h5 class="fw-bold mb-0" style="color: #111827;">Trending</h5>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="container" style="margin-bottom: 100px;">
+    <div class="text-center mb-5">
+        <h2 class="fw-bolder" style="font-size: 2.5rem; color: #111827; letter-spacing: -1px;">Reader Stories</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="neo-card p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="neo-icon-box rounded-circle me-3" style="background-color: #FBBF24;">
+                        <i class="bi bi-emoji-smile"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0" style="color: #111827;">Sarah Jenkins</h6>
+                        <small class="text-muted fw-bold">Literature Major</small>
+                    </div>
+                </div>
+                <p class="fw-medium mb-0" style="color: #4B5563;">"BookMyBook totally changed how I share notes and find indie authors on campus. The UI is just so incredibly fun to use!"</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="neo-card p-4" style="background-color: #F3F4F6;">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="neo-icon-box rounded-circle me-3" style="background-color: #38BDF8; color: white;">
+                        <i class="bi bi-emoji-sunglasses"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0" style="color: #111827;">David O.</h6>
+                        <small class="text-muted fw-bold">Daily Reader</small>
+                    </div>
+                </div>
+                <p class="fw-medium mb-0" style="color: #4B5563;">"The lightning fast loads and the geometry of the design. It's aesthetically pleasing and fundamentally solid."</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="container" style="margin-bottom: 100px;">
+    <div class="text-center mb-5">
+        <h2 class="fw-bolder" style="font-size: 2.5rem; color: #111827; letter-spacing: -1px;">Frequently Asked Questions</h2>
+    </div>
+    <div class="accordion neo-card border-0" id="faqAccordion" style="border-radius: 20px;">
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    How does the P2P sharing work?
+                </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    You simply upload a book you own, set its status (exchange, buy, or lend), and campus peers can request it directly through our secure platform!
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    Is it free for students?
+                </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    Yes! The core platform is completely free to use. Premium features and promoted listings are available for power users via our Premium plans.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    How is my data protected?
+                </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    We employ industry-standard encryption, and you are in full control of your listing privacy at all times.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    How many books can I post per month?
+                </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    Free users can post up to 3 books per month. Scholar (Premium) users get up to 5 books per month, plus a free Booster credit on signup.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    What is the Booster feature?
+                </button>
+            </h2>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    The Booster pushes your book listing to the top of the Home Feed for 7 days, making it highly visible to all campus users. It costs just ₹8.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    Can I borrow a book instead of buying it?
+                </button>
+            </h2>
+            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    Absolutely! Sellers can list their books as available for borrowing with a daily fee. You can contact them directly via phone or email to arrange the pickup and return.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    What is the Barter system?
+                </button>
+            </h2>
+            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    The Barter system allows you to trade one book for another directly with a campus peer. You can specify your barter preferences (genre, specific titles) when listing your book.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq8" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    How long do book listings stay active?
+                </button>
+            </h2>
+            <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    All book listings automatically expire after 5 days to keep the feed fresh and relevant. You can always re-upload a book if it hasn't been claimed.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none; border-bottom: 3px solid #111827;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq9" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    Can I use BookMyBook outside my campus?
+                </button>
+            </h2>
+            <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    Currently BookMyBook is optimized for campus-to-campus exchanges at Adani University. We're planning to roll out multi-campus support soon — stay tuned!
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item" style="border: none;">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark p-4" type="button" data-bs-toggle="collapse" data-bs-target="#faq10" style="background-color: #FFFFFF; font-size: 1.1rem; box-shadow: none;">
+                    How do I contact a seller?
+                </button>
+            </h2>
+            <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body fw-medium" style="background-color: #FDFBF7; color: #4B5563;">
+                    Once you are logged in, every book listing shows the seller's phone number and email directly. Just tap "Call" or "Mail" to reach out instantly — no middleman!
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="container" style="margin-bottom: 100px;">
+    <div class="neo-card neo-card-purple p-5 text-center">
+        <h2 class="fw-bolder mb-3" style="font-size: 2.2rem;">Stay in the loop</h2>
+        <p class="fw-medium mb-4 mx-auto" style="max-width: 500px;">Subscribe to our newsletter for weekly updates on top rated books, new community features, and reading challenges.</p>
+        
+        <form class="d-flex flex-column flex-md-row justify-content-center gap-3 mx-auto" style="max-width: 600px;">
+            <input type="email" class="form-control neo-input" placeholder="student@college.edu" required style="max-width: 400px; flex-grow: 1;">
+            <!-- Dummy backend handling to simulate a form -->
+            <button type="submit" class="neo-btn neo-btn-white" style="white-space: nowrap;">Subscribe ➔</button>
+        </form>
+    </div>
+</section>
+
+<!-- Padding for Mobile Nav -->
+<div class="d-block d-md-none" style="height: 80px;"></div>
+{% endblock %}

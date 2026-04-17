@@ -351,3 +351,729 @@ body {
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
+
+/* --- NEO-BRUTALISM / PLAYFUL GEOMETRY OVERRIDES --- */
+.neo-bg {
+    background-color: #FFFDF5 !important; /* Cream */
+    color: #111827 !important;
+}
+
+.chunky-border {
+    border: 2px solid #1E293B !important;
+    border-radius: 20px;
+}
+
+.hard-shadow {
+    box-shadow: 4px 4px 0px 0px #1E293B !important;
+}
+
+.badge-condition-excellent { background-color: #10B981; color: white; border: 2px solid #1E293B; }
+.badge-condition-good { background-color: #FBBF24; color: #1E293B; border: 2px solid #1E293B; }
+.badge-condition-average { background-color: #F97316; color: white; border: 2px solid #1E293B; }
+.badge-condition-poor { background-color: #EF4444; color: white; border: 2px solid #1E293B; }
+
+.badge-genre { background-color: #8B5CF6; color: white; border: 2px solid #1E293B; }
+
+/* Infinite Marquee */
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    padding: 1rem 0;
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+}
+
+.marquee-item {
+    display: inline-block;
+    margin: 0 1.5rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    background-color: #FFFFFF;
+    color: #1E293B;
+    border-radius: 9999px;
+    border: 2px solid #1E293B;
+    box-shadow: 3px 3px 0px 0px #1E293B;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Horizontal Scroll Container without scrollbar */
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.horizontal-scroll > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+.neo-card {
+    background-color: #FFFFFF;
+    border: 3px solid #111827;
+    border-radius: 24px;
+    box-shadow: 6px 6px 0px #111827;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.neo-card-yellow {
+    background-color: #FBBF24;
+}
+
+.neo-card-purple {
+    background-color: #7C3AED;
+    color: white;
+}
+
+.neo-card:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0px #111827;
+}
+
+.neo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border: 3px solid #111827;
+    border-radius: 9999px;
+    box-shadow: 4px 4px 0px #111827;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.neo-btn-primary {
+    background-color: #7C3AED;
+    color: #FFFFFF !important;
+}
+
+.neo-btn-primary:hover {
+    background-color: #6D28D9;
+    color: #FFFFFF !important;
+}
+
+.neo-btn-white {
+    background-color: #FFFFFF;
+    color: #111827 !important;
+}
+
+.neo-btn-white:hover {
+    background-color: #F3F4F6;
+}
+
+.neo-btn:active, .neo-btn.active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #111827;
+}
+
+.neo-input {
+    background-color: #FFFFFF !important;
+    border: 3px solid #111827 !important;
+    border-radius: 16px !important;
+    padding: 1rem 1.25rem !important;
+    font-weight: 600;
+    color: #111827 !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+}
+
+.neo-input:focus {
+    outline: none !important;
+    box-shadow: 4px 4px 0px #111827 !important;
+    background-color: #FFFFFF !important;
+}
+
+.neo-input::placeholder {
+    color: #9CA3AF !important;
+    font-weight: 500;
+}
+
+.wavy-underline {
+    display: inline-block;
+    position: relative;
+    color: #7C3AED;
+    font-style: italic;
+    font-weight: 800;
+}
+
+.wavy-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background-image: radial-gradient(circle, #F472B6 4px, transparent 4px);
+    background-size: 16px 12px;
+    background-repeat: round;
+}
+
+.neo-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px solid #111827;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px #111827;
+    font-size: 1.25rem;
+}
+
+/* Mobile Bottom Navigation */
+.neo-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FDFBF7;
+    border-top: 3px solid #111827;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+    z-index: 1050;
+    box-shadow: 0 -4px 0px rgba(0,0,0,0.05); /* Slight reverse shadow just in case */
+}
+
+.neo-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #111827;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.65rem;
+    transition: transform 0.2s;
+}
+
+.neo-nav-icon {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+    color: #4B5563; /* Gray default */
+}
+
+.neo-nav-item.active .neo-nav-icon, .neo-nav-item.active {
+    color: #7C3AED;
+}
+
+.neo-nav-item:active {
+    transform: scale(0.9);
+}
+
+.neo-auth-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background-color: #7C3AED;
+    border: 3px solid #111827;
+    border-radius: 20px;
+    position: relative;
+}
+
+.neo-auth-icon::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+    background-color: #FBBF24;
+    border: 3px solid #111827;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.neo-auth-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+/* ============================================
+   DARK MODE OVERRIDES FOR NEO-BRUTALISM
+   ============================================ */
+:root[data-bs-theme="dark"] .neo-card {
+    background-color: #1E293B !important;
+    border-color: #475569 !important;
+    box-shadow: 6px 6px 0px #0F172A !important;
+    color: #F1F5F9 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-card:hover {
+    box-shadow: 4px 4px 0px #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] .neo-card-yellow {
+    background-color: #854D0E !important;
+    color: #FEF3C7 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-card-purple {
+    background-color: #5B21B6 !important;
+}
+
+/* Neo buttons in dark mode */
+:root[data-bs-theme="dark"] .neo-btn {
+    border-color: #475569 !important;
+    box-shadow: 4px 4px 0px #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] .neo-btn:active,
+:root[data-bs-theme="dark"] .neo-btn.active {
+    box-shadow: 0px 0px 0px #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] .neo-btn-white {
+    background-color: #334155 !important;
+    color: #F1F5F9 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-btn-white:hover {
+    background-color: #475569 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-btn-primary {
+    background-color: #7C3AED !important;
+}
+
+/* Neo inputs in dark mode */
+:root[data-bs-theme="dark"] .neo-input {
+    background-color: #1E293B !important;
+    border-color: #475569 !important;
+    color: #F1F5F9 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-input:focus {
+    background-color: #0F172A !important;
+    box-shadow: 4px 4px 0px #475569 !important;
+}
+
+:root[data-bs-theme="dark"] .neo-input::placeholder {
+    color: #64748B !important;
+}
+
+/* Chunky border in dark mode */
+:root[data-bs-theme="dark"] .chunky-border {
+    border-color: #475569 !important;
+}
+
+:root[data-bs-theme="dark"] .hard-shadow {
+    box-shadow: 4px 4px 0px 0px #0F172A !important;
+}
+
+/* Marquee in dark mode */
+:root[data-bs-theme="dark"] .marquee-item {
+    background-color: #334155;
+    color: #F1F5F9;
+    border-color: #475569;
+    box-shadow: 3px 3px 0px 0px #0F172A;
+}
+
+/* Navbar in dark mode */
+:root[data-bs-theme="dark"] .navbar {
+    background-color: #0F172A !important;
+    border-color: #334155 !important;
+    box-shadow: 0 3px 0px #334155 !important;
+}
+
+:root[data-bs-theme="dark"] .navbar .nav-link {
+    color: #E2E8F0 !important;
+}
+
+:root[data-bs-theme="dark"] .navbar-brand {
+    color: #F1F5F9 !important;
+    -webkit-text-fill-color: #F1F5F9 !important;
+    background: none !important;
+    text-shadow: none;
+}
+
+:root[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #1E293B !important;
+    border-color: #475569 !important;
+    box-shadow: 4px 4px 0px 0px #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] .dropdown-item {
+    color: #E2E8F0 !important;
+}
+
+:root[data-bs-theme="dark"] .dropdown-item:hover {
+    background-color: #334155 !important;
+}
+
+:root[data-bs-theme="dark"] .dropdown-divider {
+    border-color: #475569 !important;
+}
+
+/* Footer in dark mode */
+:root[data-bs-theme="dark"] footer {
+    background-color: #0F172A !important;
+    border-color: #334155 !important;
+}
+
+/* Card body text overrides */
+:root[data-bs-theme="dark"] .card-body {
+    color: #F1F5F9 !important;
+}
+
+/* Override inline styles for dark text in dark mode */
+:root[data-bs-theme="dark"] [style*="color: #111827"],
+:root[data-bs-theme="dark"] [style*="color:#111827"] {
+    color: #F1F5F9 !important;
+}
+
+:root[data-bs-theme="dark"] [style*="color: #4B5563"],
+:root[data-bs-theme="dark"] [style*="color:#4B5563"] {
+    color: #94A3B8 !important;
+}
+
+:root[data-bs-theme="dark"] [style*="color: #374151"],
+:root[data-bs-theme="dark"] [style*="color:#374151"] {
+    color: #CBD5E1 !important;
+}
+
+:root[data-bs-theme="dark"] [style*="color: #064E3B"],
+:root[data-bs-theme="dark"] [style*="color:#064E3B"] {
+    color: #6EE7B7 !important;
+}
+
+:root[data-bs-theme="dark"] [style*="color: #065F46"],
+:root[data-bs-theme="dark"] [style*="color:#065F46"] {
+    color: #34D399 !important;
+}
+
+/* Background color flips for dark mode */
+:root[data-bs-theme="dark"] [style*="background-color: #FFFFFF"],
+:root[data-bs-theme="dark"] [style*="background-color:#FFFFFF"] {
+    background-color: #1E293B !important;
+}
+
+:root[data-bs-theme="dark"] [style*="background-color: #F8FAFC"],
+:root[data-bs-theme="dark"] [style*="background-color:#F8FAFC"] {
+    background-color: #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] [style*="background-color: #F3F4F6"],
+:root[data-bs-theme="dark"] [style*="background-color:#F3F4F6"] {
+    background-color: #1E293B !important;
+}
+
+:root[data-bs-theme="dark"] [style*="background-color: #FDFBF7"],
+:root[data-bs-theme="dark"] [style*="background-color:#FDFBF7"] {
+    background-color: #1E293B !important;
+}
+
+:root[data-bs-theme="dark"] [style*="background-color: #FFFDF5"],
+:root[data-bs-theme="dark"] [style*="background-color:#FFFDF5"] {
+    background-color: #0F172A !important;
+}
+
+:root[data-bs-theme="dark"] [style*="background-color: #ECFDF5"],
+:root[data-bs-theme="dark"] [style*="background-color:#ECFDF5"] {
+    background-color: #064E3B !important;
+}
+
+/* Environmental impact card green border in dark mode */
+:root[data-bs-theme="dark"] [style*="border-color: #065F46"] {
+    border-color: #059669 !important;
+}
+
+/* Pricing Scholar card dark mode */
+:root[data-bs-theme="dark"] [style*="background-color: #334155"] {
+    background-color: #0F172A !important;
+}
+
+/* Badge borders in dark mode */
+:root[data-bs-theme="dark"] .badge[style*="border: 2px solid #111827"] {
+    border-color: #475569 !important;
+}
+
+/* Category pills dark mode */
+:root[data-bs-theme="dark"] .badge[style*="box-shadow: 2px 2px 0px #111827"] {
+    box-shadow: 2px 2px 0px #0F172A !important;
+    border-color: #475569 !important;
+    background-color: #334155 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Condition and genre badges stay vibrant, just fix borders */
+:root[data-bs-theme="dark"] .badge-condition-excellent,
+:root[data-bs-theme="dark"] .badge-condition-good,
+:root[data-bs-theme="dark"] .badge-condition-average,
+:root[data-bs-theme="dark"] .badge-condition-poor,
+:root[data-bs-theme="dark"] .badge-genre {
+    border-color: #475569 !important;
+}
+
+/* Page title in dark mode */
+:root[data-bs-theme="dark"] .page-title {
+    text-shadow: none;
+}
+
+:root[data-bs-theme="dark"] .page-title::after {
+    box-shadow: none;
+}
+
+/* Border-bottom and border-dark overrides */
+:root[data-bs-theme="dark"] .border-dark {
+    border-color: #475569 !important;
+}
+
+:root[data-bs-theme="dark"] hr[style*="border-color: #111827"] {
+    border-color: #475569 !important;
+}
+
+/* Breadcrumb fix */
+:root[data-bs-theme="dark"] .breadcrumb-item.active {
+    color: #94A3B8 !important;
+}
+
+/* Text-muted boost for dark mode readability */
+:root[data-bs-theme="dark"] .text-muted {
+    color: #94A3B8 !important;
+}
+
+:root[data-bs-theme="dark"] .text-dark {
+    color: #F1F5F9 !important;
+}
+
+/* Bottom nav dark mode */
+:root[data-bs-theme="dark"] .neo-bottom-nav {
+    background-color: #0F172A;
+    border-color: #334155;
+}
+
+:root[data-bs-theme="dark"] .neo-nav-item {
+    color: #E2E8F0;
+}
+
+:root[data-bs-theme="dark"] .neo-nav-icon {
+    color: #94A3B8;
+}
+
+/* Pagination dark mode */
+:root[data-bs-theme="dark"] .page-link {
+    color: #F1F5F9 !important;
+}
+
+/* Featured Hero in dark mode — looks great already since it's dark bg */
+
+/* Auth pages */
+:root[data-bs-theme="dark"] .neo-auth-icon {
+    border-color: #475569;
+}
+
+:root[data-bs-theme="dark"] .neo-auth-icon::after {
+    border-color: #475569;
+}
+
+/* Form controls */
+:root[data-bs-theme="dark"] .form-control:disabled,
+:root[data-bs-theme="dark"] .form-control[readonly] {
+    background-color: #334155 !important;
+    color: #94A3B8 !important;
+    border-color: #475569 !important;
+}
+
+/* Alert overrides */
+:root[data-bs-theme="dark"] .alert {
+    background-color: #1E293B !important;
+    color: #F1F5F9 !important;
+    border-color: #475569 !important;
+}
+
+/* Neo icon box */
+:root[data-bs-theme="dark"] .neo-icon-box {
+    border-color: #475569;
+    box-shadow: 3px 3px 0px #0F172A;
+}
+
+/* Scrollbar for dark mode */
+:root[data-bs-theme="dark"] ::-webkit-scrollbar {
+    width: 8px;
+}
+
+:root[data-bs-theme="dark"] ::-webkit-scrollbar-track {
+    background: #0F172A;
+}
+
+:root[data-bs-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 4px;
+}
+
+/* Mobile responsive text scaling for 2-col grid */
+@media (max-width: 575.98px) {
+    .neo-card .card-body h4 {
+        font-size: 0.95rem !important;
+    }
+    .neo-card .card-body h6 {
+        font-size: 0.75rem !important;
+    }
+    .neo-card .card-body .badge {
+        font-size: 0.65rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+    .neo-card .card-body .neo-btn {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.5rem !important;
+    }
+    .neo-card .card-body .d-flex.flex-column.gap-2 {
+        gap: 0.35rem !important;
+    }
+    /* Hide the email row on very small screens to keep cards compact */
+    .neo-card .card-body a[href^="mailto:"] {
+        display: none !important;
+    }
+}
+
+/* --- CRITICAL DARK MODE FIXES --- */
+
+/* The neo-bg class forces cream — flip it for dark */
+:root[data-bs-theme="dark"] .neo-bg {
+    background-color: #030712 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Navbar inline style override for dark mode */
+:root[data-bs-theme="dark"] .navbar {
+    background-color: #0F172A !important;
+    border-bottom-color: #334155 !important;
+    box-shadow: 0 4px 0px rgba(255,255,255,0.03) !important;
+}
+
+:root[data-bs-theme="dark"] .navbar-brand span {
+    color: #F1F5F9 !important;
+}
+
+:root[data-bs-theme="dark"] .navbar-brand i {
+    color: #A78BFA !important;
+}
+
+/* Animated background for dark */
+:root[data-bs-theme="dark"] .animated-bg {
+    background: #030712 !important;
+}
+
+/* Accordion / FAQ dark mode */
+:root[data-bs-theme="dark"] .accordion-button {
+    background-color: #1E293B !important;
+    color: #F1F5F9 !important;
+    border-color: #334155 !important;
+}
+
+:root[data-bs-theme="dark"] .accordion-button::after {
+    filter: invert(1) brightness(2);
+}
+
+:root[data-bs-theme="dark"] .accordion-button:not(.collapsed) {
+    background-color: #334155 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
+
+:root[data-bs-theme="dark"] .accordion-body {
+    background-color: #0F172A !important;
+    color: #CBD5E1 !important;
+}
+
+:root[data-bs-theme="dark"] .accordion-item {
+    border-bottom-color: #334155 !important;
+}
+
+/* Card transparent override in dark mode */
+:root[data-bs-theme="dark"] .card {
+    background-color: #1E293B !important;
+}
+
+/* Wavy underline in dark mode */
+:root[data-bs-theme="dark"] .wavy-underline {
+    color: #A78BFA;
+}
+
+/* Environmental impact icon colors need to stay vibrant — already fine */
+
+/* Force text-white overrides to stay white */
+:root[data-bs-theme="dark"] .text-white {
+    color: #FFFFFF !important;
+}
+
+/* Carousel caption text in dark mode */
+:root[data-bs-theme="dark"] .carousel-inner .neo-card {
+    background-color: #1E293B !important;
+}
+
+/* Category pills / badges with bg-white in dark mode */
+:root[data-bs-theme="dark"] .bg-white {
+    background-color: #334155 !important;
+}
+
+/* Bootstrap form-control base in dark */
+:root[data-bs-theme="dark"] .form-control {
+    background-color: #1E293B;
+    color: #F1F5F9;
+    border-color: #475569;
+}
+
+:root[data-bs-theme="dark"] .form-control:focus {
+    background-color: #0F172A;
+    color: #F1F5F9;
+    border-color: #7C3AED;
+}
+
+/* Hero banner mobile responsive */
+@media (max-width: 767.98px) {
+    .neo-card[style*="height: 450px"] {
+        height: 350px !important;
+    }
+    .neo-card .w-50 {
+        width: 100% !important;
+    }
+    .neo-card .display-3 {
+        font-size: 1.8rem !important;
+    }
+    .neo-card .fs-5.fw-medium {
+        display: none !important;
+    }
+}
+
+/* Search bar fix — ensure neo-input plays nice with htmx search */
+.form-control.neo-input[type="search"] {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-control.neo-input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E") center no-repeat;
+    cursor: pointer;
+}
+
+

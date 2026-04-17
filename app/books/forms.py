@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, TextAreaField, BooleanField, FloatField, SubmitField
+from wtforms import StringField, TextAreaField, BooleanField, FloatField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Optional
 
 class UploadBookForm(FlaskForm):
@@ -10,6 +10,10 @@ class UploadBookForm(FlaskForm):
     cover_image = FileField('Cover Image', validators=[
         FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
+    
+    condition = SelectField('Condition', choices=[('Excellent', 'Excellent'), ('Good', 'Good'), ('Average', 'Average'), ('Poor', 'Poor')], default='Good', validators=[DataRequired()])
+    genre = SelectField('Genre', choices=[('Fiction', 'Fiction'), ('Technology', 'Technology'), ('Philosophy', 'Philosophy'), ('Sci-Fi', 'Sci-Fi'), ('Academic', 'Academic'), ('Other', 'Other')], default='Fiction', validators=[DataRequired()])
+    handoff_location = StringField('Preferred Handoff Location', validators=[Optional()])
     
     # Eligibility
     is_for_sale = BooleanField('Available for Sale')

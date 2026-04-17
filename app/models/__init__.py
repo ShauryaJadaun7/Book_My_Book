@@ -44,6 +44,10 @@ class Book(db.Model):
     is_for_barter = db.Column(db.Boolean, default=False)
     barter_preferences = db.Column(db.Text, nullable=True) # e.g. "Specific book title or sci-fi"
 
+    condition = db.Column(db.String(50), nullable=True, default="Good")
+    genre = db.Column(db.String(50), nullable=True, default="Fiction")
+    handoff_location = db.Column(db.String(255), nullable=True)
+
     is_available = db.Column(db.Boolean, default=True)
     is_boosted = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))

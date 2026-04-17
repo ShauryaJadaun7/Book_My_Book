@@ -29,7 +29,7 @@ def search():
     if q:
         query = query.filter(db.or_(Book.title.ilike(f'%{q}%'), Book.author.ilike(f'%{q}%')))
         
-    pagination = query.order_by(Book.created_at.desc()).paginate(page=page, per_page=12, error_out=False)
+    pagination = query.order_by(Book.created_at.desc()).paginate(page=page, per_page=6, error_out=False)
     return render_template('books/partials/book_grid.html', books=pagination.items, pagination=pagination, q=q)
 
 @books.route('/covers/<filename>')

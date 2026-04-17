@@ -1,81 +1,84 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-end mb-5 border-bottom border-subtle pb-3 fade-in-up delay-100">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 border-bottom border-dark pb-3">
     <div>
-        <h2 class="page-title mb-1">My Books</h2>
-        <p class="text-bmb-muted mb-0">Books you have listed on BookMyBook.</p>
+        <h2 class="fw-bolder mb-1" style="font-size: 3rem; color: #111827; letter-spacing: -1px;">My Books</h2>
+        <p class="fw-bold mb-0" style="color: #4B5563;">Manage your books, track trades, and explore your shelf.</p>
     </div>
-    <a href="{{ url_for('books.upload') }}" class="btn btn-primary-gradient rounded-pill px-4 shadow hover-lift">
-        + Post a New Book
+    <a href="{{ url_for('books.upload') }}" class="neo-btn neo-btn-primary mt-3 mt-md-0 fs-5 pb-2 pt-2">
+        <i class="bi bi-plus-circle me-2"></i> Post a New Book
     </a>
 </div>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 pb-5">
+<div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-5 pb-5">
     {% for book in books %}
     <div class="col fade-in-up delay-100">
-        <div class="card h-100 animated-hover-card position-relative shadow border-subtle overflow-hidden rounded-4 bmb-surface">
-
-            <div class="book-cover-wrapper position-relative">
+        <div class="neo-card h-100 d-flex flex-column" style="background-color: #FFFFFF;">
+            
+            <div class="position-relative" style="background-color: #F3F4F6;">
                 {% if book.cover_image %}
-                <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="book-cover border-bottom border-subtle"
-                    alt="{{ book.title }}">
+                <img src="{{ url_for('books.serve_cover', filename=book.cover_image) }}" class="img-fluid w-100 border-bottom border-dark" alt="{{ book.title }}" loading="lazy" style="height: 260px; object-fit: contain; border-width: 3px !important; padding: 1rem;">
                 {% else %}
-                <div
-                    class="book-cover d-flex align-items-center justify-content-center bmb-surface-secondary text-bmb-muted border-bottom border-subtle">
-                    <i class="bi bi-book fs-1"></i>
-                    <span class="ms-2">No Cover</span>
+                <div class="d-flex align-items-center justify-content-center text-muted border-bottom border-dark" style="height: 260px; border-width: 3px !important;">
+                    <i class="bi bi-book" style="font-size: 4rem;"></i>
                 </div>
                 {% endif %} 
-
-                <div class="quick-actions rounded-top shadow-lg justify-content-center">
-                    <a href="{{ url_for('books.detail', book_id=book.id) }}"
-                        class="btn btn-sm btn-info rounded-pill px-4 shadow text-white fw-bold">
-                        View Details ➔
-                    </a>
-                </div>
             </div>
 
-            <div class="card-body d-flex flex-column bmb-surface">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title fw-bold mb-0 text-truncate" title="{{ book.title }}">{{ book.title }}</h5>
-                    {% if not book.is_available %}
-                    <span class="badge bg-danger rounded-pill shadow-sm" style="font-size: 0.65rem;">UNAVAILABLE</span>
+            <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                <a href="{{ url_for('books.detail', book_id=book.id) }}" class="text-decoration-none text-reset hover-lift d-block mb-2">
+                    <h4 class="fw-bolder mb-0 text-truncate" style="color: #111827;" title="{{ book.title }}">{{ book.title }}</h4>
+                </a>
+                <h6 class="fw-bold mb-3 text-muted">{{ book.author }}</h6>
+                
+                <div class="d-flex gap-2 mb-3 mt-auto">
+                    {% if book.condition == 'Excellent' %}
+                    <span class="badge badge-condition-excellent rounded-pill px-2 py-1">Excellent</span>
+                    {% elif book.condition == 'Poor' %}
+                    <span class="badge badge-condition-poor rounded-pill px-2 py-1">Poor</span>
+                    {% elif book.condition == 'Average' %}
+                    <span class="badge badge-condition-average rounded-pill px-2 py-1">Average</span>
                     {% else %}
-                    <span class="badge bg-success rounded-pill shadow-sm" style="font-size: 0.65rem;">ACTIVE</span>
+                    <span class="badge badge-condition-good rounded-pill px-2 py-1">Good</span>
+                    {% endif %}
+                    
+                    {% if book.genre %}
+                    <span class="badge badge-genre rounded-pill px-2 py-1">{{ book.genre }}</span>
                     {% endif %}
                 </div>
-                <h6 class="card-subtitle mb-3 text-bmb-muted small">{{ book.author }}</h6>
 
-                <div class="mt-auto d-flex flex-wrap gap-2">
+                <div class="d-flex flex-wrap gap-2 mb-3">
                     {% if book.is_for_sale %}
-                    <span class="badge badge-neon-buy rounded-pill fs-7 px-3 py-2">₹{{ book.price|round(2) }}</span>
+                    <span class="badge fs-6 rounded-pill px-3 py-2" style="background-color: #FBBF24; color: #111827; border: 2px solid #111827;">₹{{ book.price|round(2) }}</span>
                     {% endif %}
                     {% if book.is_for_borrow %}
-                    <span class="badge badge-neon-borrow rounded-pill fs-7 px-3 py-2">Borrow</span>
+                    <span class="badge fs-6 rounded-pill px-3 py-2" style="background-color: #38BDF8; color: #111827; border: 2px solid #111827;">Borrow</span>
                     {% endif %}
                     {% if book.is_for_barter %}
-                    <span class="badge badge-neon-barter rounded-pill fs-7 px-3 py-2">Barter</span>
+                    <span class="badge fs-6 rounded-pill px-3 py-2" style="background-color: #F472B6; color: #111827; border: 2px solid #111827;">Barter</span>
                     {% endif %}
                 </div>
-            </div>
-
-            <div
-                class="card-footer bmb-surface border-top border-subtle pt-3 pb-3 d-flex justify-content-between align-items-center">
-                <div class="small text-bmb-muted">
-                    Uploaded {{ book.created_at.strftime('%d-%m-%Y') }}
+                
+                <div class="mt-2 d-flex flex-column gap-2">
+                    <a href="{{ url_for('books.detail', book_id=book.id) }}" class="neo-btn neo-btn-white w-100 fs-6 py-2 d-flex justify-content-center align-items-center" title="Manage Listing">
+                        <span class="fw-bold"><i class="bi bi-pencil-square me-2"></i> Manage Listing</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     {% else %}
-    <div class="col-12 text-center py-5 fade-in-up delay-200">
-        <div class="display-1 text-bmb-muted opacity-25 mb-3">📚</div>
-        <h3 class="text-bmb-muted fw-bold">You haven't listed any books yet.</h3>
-        <p class="text-bmb-muted opacity-75">Upload a book to start selling, borrowing, or bartering!</p>
-        <a href="{{ url_for('books.upload') }}" class="btn btn-primary-gradient rounded-pill mt-3 px-4 shadow hover-lift">Upload Now</a>
+    <div class="col-12 fade-in-up delay-200 w-100">
+        <div class="neo-card p-5 text-center" style="background-color: #FDFBF7;">
+            <div class="display-1 mb-3">🕳️</div>
+            <h3 class="fw-bolder" style="color: #111827;">It's empty in here.</h3>
+            <p class="fw-bold text-muted">Upload a book to start selling, borrowing, or bartering!</p>
+            <a href="{{ url_for('books.upload') }}" class="neo-btn neo-btn-primary mt-3 px-4">Upload Now</a>
+        </div>
     </div>
     {% endfor %}
 </div>
+
 {% endblock %}

@@ -67,7 +67,7 @@ def create_book(user_id, form_data, cover_image_file):
     db.session.commit()
     return book
 
-def get_available_books(exclude_user_id=None, page=1, per_page=12):
+def get_available_books(exclude_user_id=None, page=1, per_page=6):
     five_days_ago = datetime.now(timezone.utc) - timedelta(days=5)
     query = Book.query.filter(Book.is_available == True, Book.created_at >= five_days_ago)
     if exclude_user_id:

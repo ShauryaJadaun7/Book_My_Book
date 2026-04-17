@@ -1,44 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-5">
-        <div class="text-center mb-4">
-            <h1 class="page-title">Welcome Back</h1>
-            <p class="text-muted">Log in to your BookMyBook account.</p>
-        </div>
+<div class="row justify-content-center align-items-center" style="min-height: 85vh; padding-bottom: 80px;">
+    <div class="col-md-5 col-sm-8 col-11 position-relative">
         
-        <div class="floating-wrapper">
-            <div class="card p-4 shadow-lg border-subtle bmb-surface fade-in-up delay-100" style="background: var(--bmb-glass-bg); backdrop-filter: blur(10px);">
-            <div class="card-body">
-                <form method="POST" action="">
-                    {{ form.hidden_tag() }}
-                    
-                    <div class="mb-4">
-                         {{ form.email.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                         {{ form.email(class="form-control form-control-lg bmb-input", placeholder="student@college.edu") }}
-                         {% for error in form.email.errors %}
-                             <div class="text-danger small mt-1">{{ error }}</div>
-                         {% endfor %}
-                    </div>
-                    
-                    <div class="mb-4">
-                         {{ form.password.label(class="form-label text-bmb-muted small text-uppercase fw-bold") }}
-                         {{ form.password(class="form-control form-control-lg bmb-input", placeholder="••••••••") }}
-                         {% for error in form.password.errors %}
-                             <div class="text-danger small mt-1">{{ error }}</div>
-                         {% endfor %}
-                    </div>
-                    
-                    <div class="d-grid mt-5">
-                        {{ form.submit(class="btn btn-primary-gradient btn-lg rounded-pill shadow hover-lift") }}
-                    </div>
-                </form>
+        <div class="neo-card p-4 p-md-5 mt-5 fade-in-up">
+            <!-- Floating Top Icon -->
+            <div class="text-center position-absolute" style="top: -40px; left: 50%; transform: translateX(-50%);">
+                <div class="neo-auth-icon shadow">
+                    <i class="bi bi-book-half"></i>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 pt-3 mb-5">
+                <h1 class="fw-bolder fst-italic mb-2" style="font-size: 2.5rem; letter-spacing: -1px; color: #111827;">BookMyBook</h1>
+                <p class="fw-medium text-muted" style="font-size: 1.1rem; color: #4B5563 !important;">Welcome back to the library.</p>
             </div>
             
-            <div class="card-footer bg-transparent border-0 text-center mt-3">
-                <p class="text-bmb-muted mb-0">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-bold" style="color: var(--bmb-accent-primary);">Sign up here</a></p>
-            </div>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-4">
+                    {{ form.email.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                    {{ form.email(class="form-control neo-input w-100", placeholder="student@college.edu") }}
+                    {% for error in form.email.errors %}
+                        <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mb-4 position-relative">
+                    <div class="d-flex justify-content-between align-items-end">
+                        {{ form.password.label(class="form-label small text-uppercase fw-bolder tracking-wide mb-2", style="letter-spacing: 1px; color: #111827;") }}
+                        <a href="#" class="small text-decoration-none fw-bold mb-2" style="color: #7C3AED; font-size: 0.75rem;">FORGOT?</a>
+                    </div>
+                    {{ form.password(class="form-control neo-input w-100", placeholder="••••••••") }}
+                    {% for error in form.password.errors %}
+                        <div class="text-danger small mt-2 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="d-grid mt-5">
+                    {{ form.submit(class="neo-btn neo-btn-primary w-100 fs-5 pb-2 pt-2", value="Log In ➔") }}
+                </div>
+            </form>
+            
+            <div class="text-center mt-5 mb-2">
+                <hr style="border-color: #E5E7EB; opacity: 1; border-width: 2px;">
+                <p class="mb-0 mt-4 fw-medium" style="color: #4B5563;">New to the collection? <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-bold" style="color: #E11D48; border-bottom: 2px solid #E11D48; padding-bottom: 2px;">Sign up here</a></p>
             </div>
         </div>
     </div>
